@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Bag | LUXE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root { 
+            --bg-main: #0a0a0a; --bg-secondary: #121212; --text-main: #ffffff; 
+            --text-muted: #888888; --border-color: #222222; --accent-color: #d4af37; 
+            --error-color: #d32f2f;
+        }
+        
+        body { font-family: 'Montserrat', sans-serif; color: var(--text-main); background-color: var(--bg-main); padding-top: 100px; -webkit-font-smoothing: antialiased; letter-spacing: 0.5px; }
+        h1, h2, h3, .brand-font { font-family: 'Cinzel', serif; letter-spacing: 3px; }
+
+        /* Navbar */
+        .navbar { background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); padding: 20px 0; transition: all 0.3s; }
+        .navbar-brand { font-size: 2rem; letter-spacing: 6px; color: var(--text-main) !important; font-weight: 500; }
+        .nav-icon { color: var(--text-main); font-size: 1.2rem; transition: 0.3s; text-decoration: none; position: relative; }
+        .nav-icon:hover { color: var(--accent-color); }
+        .cart-badge { position: absolute; top: -8px; right: -12px; background: var(--accent-color); color: #000; font-size: 0.65rem; padding: 3px 6px; border-radius: 50%; font-weight: 600; }
+
+        /* Page Header */
+        .page-header { margin-bottom: 60px; text-align: center; }
+        .page-title { font-size: 2.2rem; font-weight: 400; text-transform: uppercase; margin-bottom: 10px; }
+        .page-subtitle { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; }
+
+        /* Premium Cart Item */
+        .cart-item { display: flex; align-items: flex-start; padding: 40px 0; border-bottom: 1px solid var(--border-color); position: relative; transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .item-img-wrapper { width: 140px; min-width: 140px; margin-right: 40px; overflow: hidden; border-radius: 2px; }
+        .item-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; filter: brightness(0.85); transition: transform 0.8s ease, filter 0.8s ease; }
+        .item-img-wrapper:hover .item-img { filter: brightness(1.1); transform: scale(1.05); }
+
+        .item-details { flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; min-height: 186px; }
+        
+        .item-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .item-name { font-size: 1.2rem; font-family: 'Cinzel', serif; color: var(--text-main); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .item-name:hover { color: var(--accent-color); }
+        .item-price { font-size: 1.1rem; font-weight: 400; font-family: 'Cinzel', serif; }
+        
+        .item-meta { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
+        
+        /* Minimalist Quantity Control */
+        .item-actions { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
+        .qty-luxe { display: inline-flex; align-items: center; gap: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        .qty-btn { background: transparent; border: none; color: var(--text-muted); font-size: 1rem; cursor: pointer; transition: 0.3s; padding: 0; outline: none; }
+        .qty-btn:hover { color: var(--text-main); transform: scale(1.2); }
+        .qty-val { font-size: 0.9rem; font-weight: 500; color: var(--text-main); min-width: 20px; text-align: center; }
+
+        .remove-link { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); text-decoration: none; cursor: pointer; transition: 0.3s; border-bottom: 1px solid transparent; padding-bottom: 2px; }
+        .remove-link:hover { color: var(--error-color); border-color: var(--error-color); }
+
+        /* Editorial Summary Sidebar */
+        .summary-box { background: var(--bg-secondary); padding: 50px 40px; position: sticky; top: 120px; border: 1px solid var(--border-color); }
+        .summary-title { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px; color: var(--text-main); font-weight: 400; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .summary-total { display: flex; justify-content: space-between; font-size: 1.4rem; margin-top: 35px; padding-top: 30px; border-top: 1px solid var(--border-color); color: var(--text-main); font-family: 'Cinzel', serif; }
+
+        /* Premium Button */
+        .btn-checkout { background: var(--text-main); color: var(--bg-main); width: 100%; border: 1px solid var(--text-main); padding: 22px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); margin-top: 40px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; }
+        .btn-checkout:hover { background: transparent; color: var(--text-main); padding-left: 30px; padding-right: 30px; }
+
+        /* Trust Signals */
+        .trust-signals { margin-top: 35px; text-align: center; }
+        .trust-signals p { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
+        .trust-icons { display: flex; justify-content: center; gap: 20px; color: var(--text-muted); opacity: 0.5; font-size: 1.2rem; }
+
+        /* Empty State */
+        .empty-cart { text-align: center; padding: 15vh 0; }
+        .empty-cart .brand-font { font-size: 3rem; margin-bottom: 20px; color: var(--text-main); }
+        .empty-cart p { color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 40px; }
+        .btn-shop { border: 1px solid var(--text-main); color: var(--text-main); padding: 18px 45px; text-transform: uppercase; letter-spacing: 3px; text-decoration: none; transition: 0.4s; display: inline-block; font-size: 0.8rem; }
+        .btn-shop:hover { background: var(--text-main); color: var(--bg-main); }
+
+        /* Footer */
+        .premium-footer { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 80px 0 30px 0; margin-top: 100px; }
+        .footer-heading { font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 25px; letter-spacing: 2px; color: var(--text-main); }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: 0.3s; letter-spacing: 0.5px; }
+        .footer-links a:hover { color: var(--accent-color); padding-left: 5px; }
+        .social-icons a { width: 40px; height: 40px; border: 1px solid var(--border-color); display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); border-radius: 50%; transition: 0.3s; text-decoration: none; margin-right: 10px; }
+        .social-icons a:hover { background: var(--text-main); color: var(--bg-main); }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 60px; text-align: center; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* JS Animation Classes */
+        .slide-out { opacity: 0; transform: translateX(-50px); }
+        .updating-overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.6); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s ease; z-index: 10; border-radius: 2px; }
+        .is-updating .updating-overlay { opacity: 1; pointer-events: all; }
+        .loader-spinner { width: 30px; height: 30px; border: 1px solid rgba(255,255,255,0.2); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+@media (max-width: 768px) {
+            /* Mobile View Optimization */
+            .page-title { font-size: 1.8rem; }
+            .cart-item { padding: 25px 0; flex-direction: row; }
+            .item-img-wrapper { width: 95px; min-width: 95px; margin-right: 15px; margin-bottom: 0; }
+            .item-details { min-height: 125px; width: auto; }
+            .item-name { font-size: 0.95rem; }
+            .item-price { font-size: 0.9rem; }
+            .item-meta { font-size: 0.65rem; }
+            .item-actions { margin-top: 15px; flex-wrap: wrap; gap: 15px; }
+            .qty-luxe { gap: 15px; }
+            .summary-box { padding: 35px 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="{% url 'home' %}" class="nav-icon"><i class="fas fa-arrow-left"></i></a>
+            <a class="navbar-brand m-0 d-flex flex-column align-items-center text-decoration-none" href="{% url 'home' %}" style="line-height: 1;">
+                <span class="brand-font" style="font-size: 1.8rem; letter-spacing: 6px; color: var(--text-main);">WEST COAST</span>
+                <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 8px; font-weight: 600; color: var(--accent-color); margin-top: 5px;">FASHION CLUB</span>
+            </a>
+            <a href="{% url 'cart' %}" class="nav-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-badge">{{ cart_items.count|default:"0" }}</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mb-5" style="min-height: 60vh;">
+        
+        {% if not cart_items %}
+            <div class="empty-cart">
+                <h1 class="brand-font">Your Bag is Empty</h1>
+                <p>Curate your wardrobe with our latest exclusive arrivals.</p>
+                <a href="{% url 'home' %}" class="btn-shop">Discover New In</a>
+            </div>
+        {% else %}
+            
+            <div class="page-header">
+                <h1 class="page-title brand-font">Shopping Bag</h1>
+                <div class="page-subtitle">{{ cart_items.count }} Selected Piece{% if cart_items.count > 1 %}s{% endif %}</div>
+            </div>
+
+            <div class="row gx-lg-5">
+                <div class="col-lg-7 col-xl-8">
+                    {% for item in cart_items %}
+                    
+                    {% if item.product %}
+                    
+                    <div class="cart-item" id="item-row-{{ item.id }}">
+                        
+                        <div class="updating-overlay">
+                            <div class="loader-spinner"></div>
+                        </div>
+
+                        <div class="item-img-wrapper">
+                            <a href="{% url 'product_detail' item.product.slug %}">
+                                <img src="{{ item.product.main_image.url }}" class="item-img" alt="{{ item.product.name }}">
+                            </a>
+                        </div>
+                        
+                        <div class="item-details">
+                            <div>
+                                <div class="item-header">
+                                    <a href="{% url 'product_detail' item.product.slug %}" class="item-name">{{ item.product.name }}</a>
+                                    <div class="item-price">₹{{ item.sub_total }}</div>
+                                </div>
+                                <div class="item-meta">
+                                    Size: <span style="color: var(--text-main);">{{ item.size }}</span> &nbsp;&nbsp;|&nbsp;&nbsp; Color: <span style="color: var(--text-main);">{{ item.color }}</span>
+                                </div>
+                                <div class="item-meta" style="font-size: 0.65rem; color: #555;">
+                                    ₹{{ item.product.price }} / unit
+                                </div>
+                            </div>
+                            
+                            <div class="item-actions">
+                                <div class="qty-luxe">
+                                    <button class="qty-btn" onclick="updateItem('{% url 'remove_cart' item.product.id item.id %}', '{{ item.id }}')">
+                                        <i class="fas fa-minus" style="font-size: 0.6rem;"></i>
+                                    </button>
+                                    <span class="qty-val">{{ item.quantity }}</span>
+                                    
+                                    <form id="add-form-{{ item.id }}" action="{% url 'add_to_cart' item.product.id %}" method="POST" style="display:none;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="size" value="{{ item.size }}">
+                                        <input type="hidden" name="color" value="{{ item.color }}">
+                                    </form>
+                                    
+                                    <button class="qty-btn" onclick="addItem('{{ item.id }}')">
+                                        <i class="fas fa-plus" style="font-size: 0.6rem;"></i>
+                                    </button>
+                                </div>
+                                
+                                <a onclick="removeItem('{% url 'remove_cart_item' item.product.id item.id %}', '{{ item.id }}')" class="remove-link">Remove Piece</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="col-lg-5 col-xl-4 mt-5 mt-lg-0">
+                    <div class="summary-box">
+                        <h3 class="summary-title brand-font">Order Summary</h3>
+                        
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span style="color: var(--text-main);">₹{{ total }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span style="color: var(--accent-color);">Complimentary</span>
+                        </div>
+                        
+                        <div class="summary-total">
+                            <span>Total</span>
+                            <span>₹{{ total }}</span>
+                        </div>
+
+                        <a href="{% url 'checkout' %}" class="btn-checkout">
+                            <span>Checkout</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+
+                        <div class="trust-signals">
+                            <p><i class="fas fa-lock me-1"></i> Secure Encrypted Payment</p>
+                            <div class="trust-icons">
+                                <i class="fab fa-cc-visa"></i>
+                                <i class="fab fa-cc-mastercard"></i>
+                                <i class="fab fa-cc-amex"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <footer class="premium-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="mb-4 d-flex flex-column" style="line-height: 1;">
+                        <span class="brand-font" style="font-size: 2.2rem; letter-spacing: 5px; color: var(--accent-color);">WEST COAST</span>
+                        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 10px; font-weight: 500; color: var(--text-main); margin-top: 8px;">FASHION CLUB</span>
+                    </div>
+                    <p class="text-muted pe-lg-4" style="font-size: 0.85rem; line-height: 1.8;">Redefining luxury fashion with premium materials and exclusive designs.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h4 class="footer-heading">Boutique</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Collections</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h4 class="footer-heading">Assistance</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'my_orders' %}">Track Order</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h4 class="footer-heading">Newsletter</h4>
+                    <div class="d-flex mt-3">
+                        <input type="email" placeholder="Email Address" style="background: transparent; border: 1px solid var(--border-color); color: white; padding: 12px 15px; width: 100%; outline: none; font-size: 0.8rem;">
+                        <button style="background: var(--text-main); color: var(--bg-main); border: none; padding: 0 20px; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; cursor: pointer;">Join</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; {% now "Y" %} LUXE FASHION HOUSE. ALL RIGHTS RESERVED.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Minus Quantity (Shows smooth blur overlay)
+        function updateItem(url, itemId) {
+            const row = document.getElementById(`item-row-${itemId}`);
+            row.classList.add('is-updating');
+            window.location.href = url;
+        }
+
+        // Plus Quantity (Shows overlay & submits)
+        function addItem(itemId) {
+            const row = document.getElementById(`item-row-${itemId}`);
+            row.classList.add('is-updating');
+            document.getElementById(`add-form-${itemId}`).submit();
+        }
+
+        // Remove Item (Elegant slide & fade out)
+        function removeItem(url, itemId) {
+            const row = document.getElementById(`item-row-${itemId}`);
+            row.classList.add('slide-out');
+            setTimeout(() => {
+                window.location.href = url;
+            }, 500); // Matches the CSS transition time
+        }
+
+        // Handle browser back-button caching
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted) { window.location.reload(); }
+        });
+    </script>
+</body>
+</html>
