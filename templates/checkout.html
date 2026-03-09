@@ -18,17 +18,14 @@
         body { font-family: 'Montserrat', sans-serif; color: var(--text-main); background-color: var(--bg-main); padding-top: 120px; -webkit-font-smoothing: antialiased; letter-spacing: 0.5px; }
         h1, h2, h3, .brand-font { font-family: 'Cinzel', serif; letter-spacing: 3px; }
 
-        /* Navbar - Fixed properly for Mobile */
         .navbar { background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); padding: 15px 0; z-index: 1050; }
         .nav-icon { color: var(--text-main); font-size: 1.2rem; transition: 0.3s; text-decoration: none; position: relative; }
         .nav-icon:hover { color: var(--accent-color); }
 
-        /* Page Header */
         .page-header { margin-bottom: 50px; text-align: center; }
         .page-title { font-size: 2rem; font-weight: 400; text-transform: uppercase; margin-bottom: 10px; }
         .page-subtitle { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; }
 
-        /* Premium Form Styling */
         .checkout-section { background: var(--bg-secondary); padding: 40px; border: 1px solid var(--border-color); border-radius: 2px; height: 100%; }
         .section-title { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; color: var(--text-main); font-weight: 400; font-family: 'Cinzel', serif; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
         
@@ -37,7 +34,6 @@
         .form-control:focus { background: transparent; border-color: var(--accent-color); box-shadow: none; color: var(--text-main); }
         .form-control::placeholder { color: #444; }
 
-        /* Order Summary Box */
         .summary-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed var(--border-color); }
         .summary-item-img { width: 60px; aspect-ratio: 3/4; object-fit: cover; filter: brightness(0.85); border-radius: 2px; margin-right: 15px; }
         .summary-item-details { flex-grow: 1; }
@@ -48,7 +44,6 @@
         .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .summary-total { display: flex; justify-content: space-between; font-size: 1.3rem; margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--border-color); color: var(--accent-color); font-family: 'Cinzel', serif; }
 
-        /* Payment Method Selectors */
         .payment-option { display: block; margin-bottom: 15px; cursor: pointer; }
         .payment-option input { display: none; }
         .payment-box { border: 1px solid var(--border-color); padding: 20px; display: flex; align-items: center; gap: 15px; transition: 0.3s; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; }
@@ -56,11 +51,9 @@
         .payment-icon { font-size: 1.5rem; color: var(--text-main); }
         .payment-option input:checked + .payment-box .payment-icon { color: var(--accent-color); }
 
-        /* Premium Button */
         .btn-place-order { background: var(--text-main); color: var(--bg-main); width: 100%; border: 1px solid var(--text-main); padding: 22px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; transition: 0.4s; margin-top: 30px; }
         .btn-place-order:hover { background: transparent; color: var(--text-main); }
 
-        /* Footer */
         .premium-footer { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 80px 0 30px 0; margin-top: 80px; }
         .footer-heading { font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 25px; letter-spacing: 2px; color: var(--text-main); }
         .footer-links { list-style: none; padding: 0; margin: 0; }
@@ -69,7 +62,6 @@
         .footer-links a:hover { color: var(--accent-color); padding-left: 5px; }
         .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 60px; text-align: center; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Mobile Optimization */
         @media (max-width: 991px) {
             body { padding-top: 100px; }
             .checkout-section { padding: 25px; height: auto; margin-bottom: 30px; }
@@ -99,7 +91,7 @@
             <div class="page-subtitle"><i class="fas fa-lock me-1"></i> 256-bit Encrypted Process</div>
         </div>
 
-        <form action="#" method="POST">
+        <form action="{% url 'place_order' %}" method="POST">
             {% csrf_token %}
             <div class="row g-4">
                 
@@ -108,13 +100,9 @@
                         <h3 class="section-title">Shipping Information</h3>
                         
                         <div class="row">
-                            <div class="col-md-6">
-                                <label class="form-label">First Name</label>
-                                <input type="text" name="first_name" class="form-control" required placeholder="Enter your first name">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Last Name</label>
-                                <input type="text" name="last_name" class="form-control" required placeholder="Enter your last name">
+                            <div class="col-12">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" name="full_name" class="form-control" required placeholder="Enter your full name">
                             </div>
                         </div>
 
@@ -130,7 +118,7 @@
                         </div>
 
                         <label class="form-label">Delivery Address</label>
-                        <input type="text" name="address_line_1" class="form-control" required placeholder="House number and street name">
+                        <input type="text" name="address1" class="form-control" required placeholder="House number and street name">
                         <input type="text" name="address_line_2" class="form-control" placeholder="Apartment, suite, unit, etc. (optional)">
 
                         <div class="row">
@@ -162,7 +150,7 @@
                         </label>
 
                         <button type="submit" class="btn-place-order mt-4">
-                            Confirm Order <i class="fas fa-arrow-right ms-2"></i>
+                            Proceed to Payment <i class="fas fa-arrow-right ms-2"></i>
                         </button>
 
                     </div>
@@ -177,7 +165,9 @@
                             {% if item.product %}
                             <div class="summary-item">
                                 <div class="d-flex align-items-center">
+                                    {% if item.product.main_image %}
                                     <img src="{{ item.product.main_image.url }}" class="summary-item-img" alt="{{ item.product.name }}">
+                                    {% endif %}
                                     <div class="summary-item-details">
                                         <div class="summary-item-title">{{ item.product.name }}</div>
                                         <div class="summary-item-meta">Size: {{ item.size }} | Color: {{ item.color }}</div>
@@ -212,29 +202,6 @@
 
     <footer class="premium-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-5 mb-4">
-                    <div class="mb-4 d-flex flex-column" style="line-height: 1;">
-                        <span class="brand-font" style="font-size: 2rem; letter-spacing: 5px; color: var(--accent-color);">WEST COAST</span>
-                        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 8px; font-weight: 500; color: var(--text-main); margin-top: 8px;">FASHION CLUB</span>
-                    </div>
-                    <p class="text-muted pe-lg-4" style="font-size: 0.85rem; line-height: 1.8;">Redefining streetwear luxury with premium materials and exclusive drops. Welcome to the club.</p>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h4 class="footer-heading">Boutique</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">New Drops</a></li>
-                        <li><a href="#">Essentials</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <h4 class="footer-heading">Assistance</h4>
-                    <ul class="footer-links">
-                        <li><a href="{% url 'my_orders' %}">Track Order</a></li>
-                        <li><a href="#">Shipping & Returns</a></li>
-                    </ul>
-                </div>
-            </div>
             <div class="footer-bottom">
                 &copy; {% now "Y" %} WEST COAST FASHION CLUB. ALL RIGHTS RESERVED.
             </div>

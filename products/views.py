@@ -162,7 +162,7 @@ def place_order(request):
         )
 
         # Razorpay Order Create ചെയ്യുന്നു
-        client = razorpay.Client(auth=("YOUR_KEY_ID", "YOUR_KEY_SECRET")) # ഇവിടെ നിങ്ങളുടെ കീകൾ നൽകുക
+        client = razorpay.Client(auth=("rzp_live_SP8AhpYHRBju0D", "ze7Ev5jrSYKiIBlk4l3tgnTM")) # ഇവിടെ നിങ്ങളുടെ കീകൾ നൽകുക
         payment = client.order.create({
             'amount': amount,
             'currency': 'INR',
@@ -183,7 +183,7 @@ def place_order(request):
         context = {
             'order': order,
             'payment': payment,
-            'razorpay_key': "YOUR_KEY_ID", # ഇവിടെ നിങ്ങളുടെ Key ID നൽകുക
+            'razorpay_key': "rzp_live_SP8AhpYHRBju0D", # ഇവിടെ നിങ്ങളുടെ Key ID നൽകുക
             'total': total
         }
         return render(request, 'payment.html', context)
