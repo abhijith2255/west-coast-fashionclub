@@ -136,6 +136,7 @@ def checkout(request):
 
 
 # 9. Place Order & Razorpay Integration
+# 9. Place Order & Razorpay Integration
 def place_order(request):
     if request.method == 'POST':
         full_name = request.POST.get('full_name')
@@ -145,24 +146,31 @@ def place_order(request):
         city = request.POST.get('city')
         pincode = request.POST.get('pincode')
 
-        # My Orders-ൽ കാണിക്കാൻ ഇമെയിൽ സെഷനിൽ സേവ് ചെയ്യുന്നു
         request.session['customer_email'] = email 
 
-        cart = Cart.objects.get(cart_id=_cart_id(request))
-        cart_items = CartItem.objects.filter(cart=cart)
-        
+        # Cart എടുക്കുമ്പോൾ Error വരാതിരിക്കാൻ try-except ചേർക്കുന്നു
+        try:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(cart=cart)
+            
+            # കാർട്ടിൽ ഒന്നുമില്ലെങ്കിലും തിരികെ ഹോമിലേക്ക് പോകാൻ
+            if not cart_items.exists():
+                return redirect('home') 
+                
+        except Cart.DoesNotExist:
+            return redirect('home') # Cart കണ്ടില്ലെങ്കിൽ ഹോമിലേക്ക് പോവുക
+
         total = sum(item.sub_total() for item in cart_items)
         amount = int(total * 100) # Razorpay requires amount in paise
 
-        # Database-ൽ ഓർഡർ സേവ് ചെയ്യുന്നു
         order = Order.objects.create(
             full_name=full_name, email=email, phone=phone,
             address=address, city=city, pincode=pincode,
             total_amount=total
         )
 
-        # Razorpay Order Create ചെയ്യുന്നു
-        client = razorpay.Client(auth=("rzp_live_SP8AhpYHRBju0D", "ze7Ev5jrSYKiIBlk4l3tgnTM")) # ഇവിടെ നിങ്ങളുടെ കീകൾ നൽകുക
+        # നിങ്ങളുടെ യഥാർത്ഥ കീകൾ ഇവിടെ ഉണ്ടെന്ന് ഉറപ്പുവരുത്തുക
+        client = razorpay.Client(auth=("rzp_live_SP8AhpYHRBju0D", "ze7Ev5jrSYKiIBlk4l3tgnTM")) 
         payment = client.order.create({
             'amount': amount,
             'currency': 'INR',
@@ -172,7 +180,6 @@ def place_order(request):
         order.order_id = payment['id']
         order.save()
 
-        # ഓർഡർ ഐറ്റംസ് സേവ് ചെയ്യുന്നു
         for item in cart_items:
             OrderItem.objects.create(
                 order=order, product=item.product, quantity=item.quantity,
@@ -183,12 +190,11 @@ def place_order(request):
         context = {
             'order': order,
             'payment': payment,
-            'razorpay_key': "rzp_live_SP8AhpYHRBju0D", # ഇവിടെ നിങ്ങളുടെ Key ID നൽകുക
+            'razorpay_key': "rzp_live_SP8AhpYHRBju0D", # നിങ്ങളുടെ യഥാർത്ഥ Key ID ഇവിടെ നൽകുക
             'total': total
         }
         return render(request, 'payment.html', context)
     return redirect('cart')
-
 
 # 10. Payment Success & Clear Cart
 def payment_success(request):
