@@ -3,401 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ product.name }} | LUXE</title>
+    <title>{{ product.name }} | WEST COAST FASHION CLUB</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         :root { 
-            --bg-main: #0a0a0a; --bg-secondary: #121212; --text-main: #ffffff; 
-            --text-muted: #888888; --border-color: #2a2a2a; --accent-color: #d4af37; 
-            --error-color: #d32f2f;
+            --bg-main: #0a0a0a; --bg-card: #151515; --text-main: #ffffff; 
+            --text-muted: #999999; --border-color: #333333; --accent-color: #d4af37; 
         }
         
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-main); color: var(--text-main); padding-top: 100px; -webkit-font-smoothing: antialiased; letter-spacing: 0.5px; }
-        h1, h2, h3, .brand-font { font-family: 'Cinzel', serif; letter-spacing: 3px; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-main); color: var(--text-main); padding-top: 90px; }
+        .brand-font { font-family: 'Cinzel', serif; letter-spacing: 3px; }
 
-        /* Navbar */
-        .navbar { background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); padding: 20px 0; transition: all 0.3s; }
-        .navbar-brand { font-size: 2rem; letter-spacing: 6px; color: var(--text-main) !important; font-weight: 500; }
-        .nav-icon { color: var(--text-main); font-size: 1.2rem; transition: 0.3s; text-decoration: none; position: relative; }
+        /* Premium Navbar */
+        .premium-nav { background: rgba(10, 10, 10, 0.98); border-bottom: 1px solid var(--border-color); padding: 15px 0; z-index: 1050; transition: 0.3s; }
+        .nav-icon { color: var(--text-main); font-size: 1.2rem; text-decoration: none; transition: 0.3s; }
         .nav-icon:hover { color: var(--accent-color); }
-        .cart-badge { position: absolute; top: -8px; right: -12px; background: var(--accent-color); color: #000; font-size: 0.65rem; padding: 3px 6px; border-radius: 50%; font-weight: 600; }
+        .nav-links-desktop a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
+        .nav-links-desktop a:hover { color: var(--accent-color); }
+        .cart-badge { position: absolute; top: -5px; right: -8px; background: var(--accent-color); color: #000; font-size: 0.6rem; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
 
-        /* Breadcrumbs */
-        .luxe-breadcrumb { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; color: var(--text-muted); }
-        .luxe-breadcrumb a { color: var(--text-muted); text-decoration: none; transition: 0.3s; }
-        .luxe-breadcrumb a:hover { color: var(--accent-color); }
-        .luxe-breadcrumb span { margin: 0 10px; opacity: 0.5; }
+        /* Product Grid & Details */
+        .image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border: 1px solid var(--border-color); border-radius: 4px; transition: 0.3s ease-in-out; }
 
-        /* Product Gallery */
-        .gallery-wrapper { position: relative; }
-        .main-image-container { max-width: 500px; margin: 0 auto; overflow: hidden; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 2px; }
-        .product-image-main { width: 100%; aspect-ratio: 3/4; object-fit: cover; filter: brightness(0.9); transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); cursor: zoom-in; }
-        .product-image-main:hover { filter: brightness(1.1); transform: scale(1.05); }
-        
-        .gallery-thumbnails { display: flex; gap: 15px; margin-top: 25px; overflow-x: auto; padding-bottom: 10px; justify-content: center; }
-        .gallery-img { width: 70px; height: 95px; object-fit: cover; cursor: pointer; opacity: 0.4; border: 1px solid transparent; transition: 0.4s ease; filter: grayscale(80%); border-radius: 2px; }
-        .gallery-img:hover, .gallery-img.active-thumb { opacity: 1; border-color: var(--accent-color); filter: grayscale(0%); transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .product-title { font-size: 1.8rem; text-transform: uppercase; font-weight: 500; margin-bottom: 5px; }
+        .product-price-box { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        .current-price { font-size: 1.8rem; color: var(--accent-color); font-family: 'Cinzel', serif; font-weight: 600; }
+        .original-price { font-size: 1rem; color: var(--text-muted); text-decoration: line-through; }
 
-        /* Product Info - Sticky Right Column */
-        .product-info-wrapper { position: sticky; top: 120px; padding: 0 20px; }
-        
-        .product-title { font-size: 2.2rem; color: var(--text-main); line-height: 1.3; margin-bottom: 15px; text-transform: uppercase; font-weight: 400; }
-        .product-price { font-size: 1.4rem; font-weight: 400; margin-bottom: 25px; color: var(--text-main); font-family: 'Cinzel', serif; letter-spacing: 1px; }
-        .product-price del { color: var(--text-muted); font-size: 0.9rem; margin-left: 10px; }
+        /* Info Boxes */
+        .info-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; margin-bottom: 25px; }
+        .box-title { font-size: 1rem; font-weight: 600; margin-bottom: 15px; display: block; }
+        .delivery-location { color: var(--accent-color); font-size: 0.85rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
+        .delivery-date-row { display: flex; align-items: flex-start; gap: 15px; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px; }
+        .trust-icons { display: flex; justify-content: space-around; text-align: center; }
+        .trust-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-muted); }
+        .trust-item i { font-size: 1.2rem; color: var(--accent-color); }
 
-        /* Rating Stars Mini */
-        .mini-rating { font-size: 0.75rem; display: flex; align-items: center; gap: 8px; margin-bottom: 20px; cursor: pointer; }
-        .mini-rating i { color: var(--accent-color); }
-        .mini-rating span { color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; text-decoration: underline; text-underline-offset: 4px; transition: 0.3s; }
-        .mini-rating:hover span { color: var(--text-main); }
+        /* Highlights */
+        .highlights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.85rem; }
+        .highlight-item { display: flex; flex-direction: column; }
+        .highlight-label { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 2px; }
+        .highlight-value { color: var(--text-main); font-weight: 500; }
 
-        /* Luxury Selectors */
-        .selector-wrapper { margin-bottom: 35px; }
-        .selector-title { font-size: 0.7rem; text-transform: uppercase; font-weight: 600; margin-bottom: 15px; color: var(--text-muted); letter-spacing: 2px; display: flex; justify-content: space-between; }
-        
-        .size-selector input[type="radio"], .color-selector input[type="radio"] { display: none; }
-        .size-selector label { display: inline-block; padding: 12px 0; width: 65px; text-align: center; border: 1px solid var(--border-color); margin-right: 10px; cursor: pointer; transition: all 0.3s ease; font-size: 0.8rem; color: var(--text-main); background: transparent; }
-        .size-selector label:hover { border-color: var(--text-muted); }
-        .size-selector input[type="radio"]:checked + label { border-color: var(--accent-color); background-color: var(--accent-color); color: #000; font-weight: 600; }
+        /* Size Selectors */
+        .selector-title { font-size: 0.85rem; text-transform: uppercase; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); display: block; }
+        .size-selector input { display: none; }
+        .size-selector label { display: inline-block; padding: 8px 15px; border: 1px solid var(--border-color); margin: 0 5px 10px 0; cursor: pointer; transition: 0.3s; font-size: 0.85rem; border-radius: 4px; }
+        .size-selector input:checked + label { border-color: var(--accent-color); background: var(--accent-color); color: #000; font-weight: 600; }
 
-        .color-selector label { display: inline-block; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-color); margin-right: 15px; cursor: pointer; transition: 0.3s; position: relative; }
-        .color-selector input[type="radio"]:checked + label { transform: scale(1.15); box-shadow: 0 0 0 2px var(--bg-main), 0 0 0 4px var(--accent-color); }
+        /* 🌟 Flipkart Style Color Thumbnails CSS 🌟 */
+        .color-thumbnail-selector { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+        .color-thumbnail-selector input { display: none; }
+        .color-thumbnail-selector label { 
+            width: 65px; height: 85px; 
+            border: 2px solid var(--border-color); 
+            cursor: pointer; transition: 0.3s; 
+            padding: 3px; border-radius: 4px; background: var(--bg-card);
+        }
+        .color-thumbnail-selector label img { 
+            width: 100%; height: 100%; object-fit: cover; border-radius: 2px; 
+        }
+        .color-thumbnail-selector input:checked + label { 
+            border-color: var(--accent-color); 
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Error & Warning */
+        #selection-error { display: none; color: #ff6b6b; font-size: 0.85rem; margin-bottom: 15px; font-weight: 500; border-left: 2px solid #ff6b6b; padding-left: 10px; }
+        #dynamic-stock-warning { display: none; font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; padding: 12px; border-radius: 4px; }
 
         /* Action Buttons */
-        .btn-add { background-color: var(--text-main); color: var(--bg-main); width: 100%; padding: 22px 0; text-transform: uppercase; letter-spacing: 3px; border: 1px solid var(--text-main); font-size: 0.8rem; font-weight: 600; transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 10px; }
-        .btn-add:hover { background-color: var(--bg-main); color: var(--text-main); }
-        .btn-add:disabled { background-color: #222; color: #555; border-color: #222; cursor: not-allowed; }
+        .action-btn-container { display: flex; gap: 15px; margin-top: 20px; margin-bottom: 30px; }
+        .btn-cart-outline { flex: 1; background-color: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); padding: 18px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; transition: 0.3s; border-radius: 4px; }
+        .btn-cart-outline:hover { background-color: var(--accent-color); color: #000; }
+        .btn-buy-solid { flex: 1; background-color: var(--accent-color); color: #000; border: 1px solid var(--accent-color); padding: 18px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; transition: 0.3s; border-radius: 4px; }
+        .btn-buy-solid:hover { background-color: #fff; border-color: #fff; }
+        .btn-cart-outline:disabled, .btn-buy-solid:disabled { background-color: #222; color: #555; border-color: #222; cursor: not-allowed; }
 
-        #selection-error { display: none; background-color: rgba(211, 47, 47, 0.05); border-left: 2px solid var(--error-color); padding: 12px 15px; color: #ff6b6b; margin-bottom: 25px; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
+        @media (max-width: 768px) { 
+            .action-btn-container { gap: 10px; } 
+            .btn-cart-outline, .btn-buy-solid { padding: 15px 10px; font-size: 0.8rem; letter-spacing: 1px; } 
+        }
 
-        /* Luxury Accordion (Details, Shipping) */
-        .luxe-accordion { margin-top: 40px; border-top: 1px solid var(--border-color); }
-        .accordion-item { border-bottom: 1px solid var(--border-color); }
-        .accordion-header { width: 100%; background: transparent; border: none; padding: 25px 0; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
-        .accordion-header:hover { color: var(--accent-color); }
-        .accordion-icon { transition: transform 0.4s ease; font-size: 0.8rem; color: var(--text-muted); }
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0, 1, 0, 1); color: var(--text-muted); font-size: 0.85rem; line-height: 2; }
-        .accordion-content-inner { padding-bottom: 25px; }
-        
-        .accordion-item.active .accordion-content { max-height: 1000px; transition: max-height 1s ease-in-out; }
-        .accordion-item.active .accordion-icon { transform: rotate(45deg); color: var(--accent-color); }
-
-        /* Reviews Section Editorial Style */
-        .reviews-section { margin-top: 100px; padding-top: 80px; border-top: 1px solid var(--border-color); }
-        .review-title-area { text-align: center; margin-bottom: 60px; }
-        .review-big-score { font-size: 4rem; color: var(--accent-color); font-family: 'Cinzel', serif; line-height: 1; margin-bottom: 10px; }
-        
-        .review-card { background: transparent; border: none; border-bottom: 1px solid var(--border-color); padding: 40px 0; margin-bottom: 0; }
-        .review-stars { color: var(--accent-color); font-size: 0.7rem; margin-bottom: 15px; letter-spacing: 2px; }
-        .review-text { font-size: 1.1rem; line-height: 1.8; color: #e0e0e0; font-style: italic; font-family: 'Playfair Display', serif; margin-bottom: 20px; }
-        .review-meta { display: flex; align-items: center; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
-        .verified-badge { color: var(--accent-color); margin-left: 15px; }
-
-        /* Footer */
-        .premium-footer { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 80px 0 30px 0; margin-top: 100px; }
-        .footer-heading { font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 25px; letter-spacing: 2px; color: var(--text-main); }
-        .footer-links { list-style: none; padding: 0; margin: 0; }
-        .footer-links li { margin-bottom: 12px; }
-        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: 0.3s; letter-spacing: 0.5px; }
-        .footer-links a:hover { color: var(--accent-color); padding-left: 5px; }
-        .social-icons a { width: 40px; height: 40px; border: 1px solid var(--border-color); display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); border-radius: 50%; transition: 0.3s; text-decoration: none; margin-right: 10px; }
-        .social-icons a:hover { background: var(--text-main); color: var(--bg-main); }
+        /* Premium Footer */
+        .premium-footer { background: var(--bg-card); border-top: 1px solid var(--border-color); padding: 80px 0 30px 0; margin-top: 60px; }
         .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 60px; text-align: center; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
-
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-5px); } 50% { transform: translateX(5px); } }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar fixed-top premium-nav">
         <div class="container d-flex justify-content-between align-items-center">
-            <a href="{% url 'home' %}" class="nav-icon"><i class="fas fa-arrow-left"></i></a>
-            <a class="navbar-brand m-0 d-flex flex-column align-items-center text-decoration-none" href="{% url 'home' %}" style="line-height: 1;">
-                <span class="brand-font" style="font-size: 1.8rem; letter-spacing: 6px; color: var(--text-main);">WEST COAST</span>
-                <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 8px; font-weight: 600; color: var(--accent-color); margin-top: 5px;">FASHION CLUB</span>
-            </a>
-            <a href="{% url 'cart' %}" class="nav-icon">
-                <i class="fas fa-shopping-bag"></i>
-                <span class="cart-badge">{{ cart_count|default:"0" }}</span>
-            </a>
+            <div class="d-flex align-items-center gap-3 w-25"><a href="#" class="nav-icon d-lg-none"><i class="fas fa-bars"></i></a><a href="#" class="nav-icon d-none d-lg-block"><i class="fas fa-search"></i></a><div class="d-none d-lg-flex gap-4 ms-3 nav-links-desktop"><a href="{% url 'store' %}">Shop</a></div></div>
+            <a class="navbar-brand m-0 d-flex flex-column align-items-center text-decoration-none w-50 text-center" href="{% url 'home' %}"><span class="brand-font" style="font-size: 1.6rem; letter-spacing: 5px; color: var(--text-main);">WEST COAST</span><span style="font-family: 'Montserrat', sans-serif; font-size: 0.5rem; letter-spacing: 8px; font-weight: 600; color: var(--accent-color); margin-top: 4px;">FASHION CLUB</span></a>
+            <div class="d-flex align-items-center justify-content-end gap-3 w-25"><a href="{% url 'my_orders' %}" class="nav-icon d-none d-lg-block"><i class="far fa-user"></i></a><a href="{% url 'cart' %}" class="nav-icon position-relative"><i class="fas fa-shopping-bag"></i><span class="cart-badge">{{ cart_count|default:"0" }}</span></a></div>
         </div>
     </nav>
 
-    <div class="container mt-4 mb-5">
-        
-        <div class="luxe-breadcrumb">
-            <a href="{% url 'home' %}">Home</a> <span>/</span> 
-            <a href="#">{{ product.category.name }}</a> <span>/</span> 
-            <span style="color: var(--text-main); opacity: 1;">{{ product.name }}</span>
-        </div>
-
+    <div class="container my-4">
         <div class="row gx-lg-5">
             
-            <div class="col-lg-6 mb-5 mb-lg-0 gallery-wrapper">
-                <div class="main-image-container">
-                    <img src="{{ product.main_image.url }}" class="product-image-main" id="mainImage" alt="{{ product.name }}">
-                </div>
-                <div class="gallery-thumbnails">
-                    <img src="{{ product.main_image.url }}" class="gallery-img active-thumb" onclick="changeImage(this)">
-                    {% for image in product.gallery_images.all %}
-                        <img src="{{ image.image.url }}" class="gallery-img" onclick="changeImage(this)">
+            <div class="col-lg-5 mb-4">
+                <div class="image-grid" id="product-gallery-container">
+                    <img src="{{ product.main_image.url }}" class="grid-img" id="main-product-image" alt="{{ product.name }}">
+                    {% for image in product_gallery|slice:":3" %}
+                        <img src="{{ image.image.url }}" class="grid-img" alt="Gallery Image">
                     {% endfor %}
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="product-info-wrapper">
-                    
-                    <h1 class="product-title brand-font">{{ product.name }}</h1>
-                    
-                    <div class="product-price">
-                        {% if product.discount_price %}
-                            <span style="color: var(--accent-color);">₹{{ product.discount_price }}</span> <del>₹{{ product.price }}</del>
-                        {% else %}
-                            ₹{{ product.price }}
-                        {% endif %}
+            <div class="col-lg-7">
+                <h1 class="product-title brand-font">{{ product.name }}</h1>
+                
+                <div class="mb-3 d-flex align-items-center">
+                    <div style="color: var(--accent-color); font-size: 1rem;">
+                        <i class="fas fa-star"></i> {{ average_rating|floatformat:1 }}
                     </div>
-
-                    <div class="mini-rating" onclick="scrollToReviews()">
-                        {% if review_count > 0 %}
-                            <div>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span>Read {{ review_count }} Reviews</span>
-                        {% else %}
-                            <span>New Arrival - No reviews yet</span>
-                        {% endif %}
+                    <div style="color: var(--text-muted); font-size: 0.85rem; margin-left: 10px; border-left: 1px solid var(--border-color); padding-left: 10px;">
+                        {{ review_count }} Ratings & Reviews
                     </div>
-
-                    <form action="{% url 'add_to_cart' product.id %}" method="POST" id="productForm" class="mt-5">
-                        {% csrf_token %}
-
-                        {% if product.sizes.all %}
-                        <div class="selector-wrapper">
-                            <div class="selector-title">
-                                <span>Select Size</span>
-                                <a href="#" style="color: var(--text-muted); text-decoration: underline; text-transform: none; font-weight: 400; letter-spacing: 0.5px;">Size Guide</a>
-                            </div>
-                            <div class="size-selector">
-                                {% for size in product.sizes.all %}
-                                    <input type="radio" name="size" id="size_{{ size.id }}" value="{{ size.name }}">
-                                    <label for="size_{{ size.id }}">{{ size.name }}</label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        {% if product.colors.all %}
-                        <div class="selector-wrapper">
-                            <div class="selector-title"><span>Select Color</span></div>
-                            <div class="color-selector">
-                                {% for color in product.colors.all %}
-                                    <input type="radio" name="color" id="color_{{ color.id }}" value="{{ color.name }}">
-                                    <label for="color_{{ color.id }}" style="background-color: {{ color.hex_code|default:'#333' }};" title="{{ color.name }}"></label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        <div id="selection-error">
-                            <i class="fas fa-exclamation-triangle me-2"></i> Please select your size and color.
-                        </div>
-
-                        <button type="submit" class="btn-add" id="addToCartBtn" {% if product.stock == 0 %}disabled{% endif %}>
-                            {% if product.stock == 0 %} 
-                                Currently Unavailable 
-                            {% else %} 
-                                Add to Bag
-                            {% endif %}
-                        </button>
-                    </form>
-
-                    <div class="luxe-accordion">
-                        <div class="accordion-item active"> <button class="accordion-header" onclick="toggleAccordion(this)">
-                                Product Details <i class="fas fa-plus accordion-icon"></i>
-                            </button>
-                            <div class="accordion-content">
-                                <div class="accordion-content-inner">
-                                    {{ product.description }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" onclick="toggleAccordion(this)">
-                                Complimentary Delivery <i class="fas fa-plus accordion-icon"></i>
-                            </button>
-                            <div class="accordion-content">
-                                <div class="accordion-content-inner">
-                                    Enjoy complimentary standard shipping on all orders. Express delivery options are available at checkout. All items are delivered in our signature premium packaging.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" onclick="toggleAccordion(this)">
-                                Returns & Exchanges <i class="fas fa-plus accordion-icon"></i>
-                            </button>
-                            <div class="accordion-content">
-                                <div class="accordion-content-inner">
-                                    You have 30 days from the date of delivery to return or exchange your item. The piece must be unworn and in its original condition with all tags attached.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
-        </div>
-
-        <div class="reviews-section" id="reviews-area">
-            <div class="review-title-area">
-                <h3 class="brand-font" style="font-size: 2rem; margin-bottom: 30px;">Client Impressions</h3>
-                {% if review_count > 0 %}
-                    <div class="review-big-score">{{ avg_rating }}</div>
-                    <div class="review-stars">
-                        <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);">Based on {{ review_count }} verified reviews</div>
-                {% endif %}
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    {% if reviews %}
-                        {% for review in reviews %}
-                            <div class="review-card">
-                                <div class="review-stars">
-                                    {% for i in "12345"|make_list %}
-                                        {% if forloop.counter <= review.rating %}
-                                            <i class="fas fa-star"></i>
-                                        {% else %}
-                                            <i class="far fa-star"></i>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                                <div class="review-text">"{{ review.review_text }}"</div>
-                                <div class="review-meta">
-                                    <span style="color: var(--text-main);">{{ review.name }}</span>
-                                    <span class="verified-badge"><i class="fas fa-check-circle me-1"></i> Verified Client</span>
-                                    <span style="margin-left: auto;">{{ review.created_at|date:"d M Y" }}</span>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        
-                        <div class="text-center mt-5">
-                            <button class="btn btn-outline-light rounded-0 text-uppercase" style="letter-spacing: 2px; font-size: 0.75rem; padding: 12px 30px; border-color: var(--border-color);">Load More</button>
-                        </div>
+                
+                <div class="product-price-box mt-2">
+                    {% if product.discount_price %}
+                        <div class="current-price">₹{{ product.discount_price }}</div>
+                        <div class="original-price">₹{{ product.price }}</div>
+                        <div style="color: #388e3c; font-weight: 600; font-size: 0.9rem;">Special Price</div>
                     {% else %}
-                        <div class="text-center py-5">
-                            <p class="text-muted" style="letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;">No reviews yet. Be the first to experience this piece.</p>
-                        </div>
+                        <div class="current-price">₹{{ product.price }}</div>
                     {% endif %}
                 </div>
+
+                <form action="{% url 'add_to_cart' product.id %}" method="POST" id="productForm">
+                    {% csrf_token %}
+
+                    <div id="dynamic-stock-warning"></div>
+
+                    {% if color_data %}
+                    <div class="mb-4">
+                        <span class="selector-title">Color: <span id="selected-color-name" style="color: var(--text-main); font-weight: 600; margin-left: 5px;"></span></span>
+                        <div class="color-thumbnail-selector">
+                            {% for color in color_data %}
+                                <input type="radio" name="color" id="color_{{ color.name }}" value="{{ color.name }}">
+                                <label for="color_{{ color.name }}" title="{{ color.name }}">
+                                    <img src="{{ color.url }}" alt="{{ color.name }}">
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if sizes %}
+                    <div class="mb-4">
+                        <span class="selector-title">Select Size</span>
+                        <div class="size-selector">
+                            {% for size in sizes %}
+                                <input type="radio" name="size" id="size_{{ size }}" value="{{ size }}">
+                                <label for="size_{{ size }}">{{ size }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div id="selection-error">
+                        <i class="fas fa-exclamation-triangle"></i> Please select both Color and Size.
+                    </div>
+
+                    <div class="action-btn-container">
+                        <button type="submit" name="action" value="add_to_cart" class="btn-cart-outline submit-dynamic-btn">Add to Cart</button>
+                        <button type="submit" name="action" value="buy_now" class="btn-buy-solid submit-dynamic-btn">Order Now</button>
+                    </div>
+                </form> 
+
+                <div class="info-box mt-4">
+                    <span class="box-title">Delivery Details</span>
+                    <div class="delivery-location"><i class="fas fa-map-marker-alt"></i> Location not set <span style="text-decoration: underline; font-size: 0.75rem; margin-left: 5px;">Select delivery location</span></div>
+                    <div class="delivery-date-row">
+                        <i class="fas fa-truck mt-1" style="font-size: 1.2rem; color: var(--text-muted);"></i>
+                        <div><div style="font-weight: 600; color: var(--text-main);">Delivery by <span id="delivery-date"></span></div></div>
+                    </div>
+                    <div class="trust-icons">
+                        <div class="trust-item"><i class="fas fa-undo"></i> 10-Day<br>Return</div>
+                        <div class="trust-item"><i class="fas fa-rupee-sign"></i> Cash on<br>Delivery</div>
+                        <div class="trust-item"><i class="fas fa-shield-check"></i> WEST COAST<br>Assured</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <span class="box-title">Product Highlights</span>
+                    <div class="highlights-grid">
+                        <div class="highlight-item"><span class="highlight-label">Category</span><span class="highlight-value">{{ product.category.name }}</span></div>
+                        <div class="highlight-item"><span class="highlight-label">Gender</span><span class="highlight-value">{{ product.gender }}</span></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
     <footer class="premium-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <div class="mb-4 d-flex flex-column" style="line-height: 1;">
-                        <span class="brand-font" style="font-size: 2.2rem; letter-spacing: 5px; color: var(--accent-color);">WEST COAST</span>
-                        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 10px; font-weight: 500; color: var(--text-main); margin-top: 8px;">FASHION CLUB</span>
-                    </div>
-                    <p class="text-muted pe-lg-4" style="font-size: 0.85rem; line-height: 1.8;">Redefining luxury fashion with premium materials and exclusive designs.</p>
-                    <div class="social-icons mt-4">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <h4 class="footer-heading">Boutique</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">New Arrivals</a></li>
-                        <li><a href="#">Collections</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <h4 class="footer-heading">Assistance</h4>
-                    <ul class="footer-links">
-                        <li><a href="{% url 'my_orders' %}">Track Order</a></li>
-                        <li><a href="#">Shipping & Returns</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-4 col-md-4">
-                    <h4 class="footer-heading">Newsletter</h4>
-                    <div class="d-flex mt-3">
-                        <input type="email" placeholder="Email Address" style="background: transparent; border: 1px solid var(--border-color); color: white; padding: 12px 15px; width: 100%; outline: none; font-size: 0.8rem;">
-                        <button style="background: var(--text-main); color: var(--bg-main); border: none; padding: 0 20px; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; cursor: pointer;">Join</button>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; {% now "Y" %} LUXE FASHION HOUSE. ALL RIGHTS RESERVED.
-            </div>
+            <div class="row"><div class="col-lg-4 mb-4"><div class="mb-4 d-flex flex-column" style="line-height: 1;"><span class="brand-font" style="font-size: 1.8rem; letter-spacing: 5px; color: var(--text-main);">WEST COAST</span></div><p class="text-muted" style="font-size: 0.8rem; line-height: 1.8;">Redefining streetwear luxury with premium materials and exclusive drops.</p></div></div>
+            <div class="footer-bottom">&copy; {% now "Y" %} WEST COAST FASHION CLUB. ALL RIGHTS RESERVED.</div>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Gallery Swap
-        function changeImage(element) {
-            document.getElementById('mainImage').src = element.src;
-            document.querySelectorAll('.gallery-img').forEach(img => img.classList.remove('active-thumb'));
-            element.classList.add('active-thumb');
-        }
+        const deliveryDate = new Date();
+        deliveryDate.setDate(deliveryDate.getDate() + 3);
+        const options = { day: 'numeric', month: 'short', weekday: 'short' };
+        document.getElementById('delivery-date').innerText = deliveryDate.toLocaleDateString('en-US', options);
 
-        // Smooth Scroll to Reviews
-        function scrollToReviews() {
-            document.getElementById('reviews-area').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Luxury Accordion Toggle
-        function toggleAccordion(btn) {
-            const item = btn.parentElement;
-            // Close others
-            document.querySelectorAll('.accordion-item').forEach(otherItem => {
-                if(otherItem !== item) otherItem.classList.remove('active');
-            });
-            // Toggle current
-            item.classList.toggle('active');
-        }
-
-        // Form Validation
+        const variantStock = JSON.parse('{{ variant_data|escapejs|default:"{}" }}');
+        const colorImages = JSON.parse('{{ color_images|escapejs|default:"{}" }}'); 
+        const colorGallery = JSON.parse('{{ color_gallery|escapejs|default:"{}" }}'); // 🌟 ഗാലറി ഡാറ്റ 🌟
+        
+        const submitBtns = document.querySelectorAll('.submit-dynamic-btn');
+        const stockWarning = document.getElementById('dynamic-stock-warning');
+        const errorMsg = document.getElementById('selection-error');
         const form = document.getElementById('productForm');
-        const errorDiv = document.getElementById('selection-error');
-        const btn = document.getElementById('addToCartBtn');
+        const selectedColorText = document.getElementById('selected-color-name'); 
 
         form.onsubmit = function(e) {
             const size = document.querySelector('input[name="size"]:checked');
             const color = document.querySelector('input[name="color"]:checked');
-            
-            const hasSizeOpts = document.querySelector('input[name="size"]');
-            const hasColorOpts = document.querySelector('input[name="color"]');
-            
-            if ((hasSizeOpts && !size) || (hasColorOpts && !color)) {
+            if ((document.querySelector('input[name="size"]') && !size) || (document.querySelector('input[name="color"]') && !color)) {
                 e.preventDefault(); 
-                errorDiv.style.display = 'block'; 
-                btn.style.animation = 'shake 0.4s ease-in-out';
-                setTimeout(() => btn.style.animation = '', 400);
-            } else {
-                btn.innerHTML = 'Processing... <i class="fas fa-circle-notch fa-spin ms-2"></i>';
-                btn.style.opacity = '0.7';
+                errorMsg.style.display = 'block'; 
+                window.scrollTo({ top: form.offsetTop - 100, behavior: 'smooth' });
             }
         };
 
-        // Hide error on select
-        document.querySelectorAll('input[type="radio"]').forEach(radio => {
-            radio.addEventListener('change', () => {
-                errorDiv.style.display = 'none';
+        function showWarning(type, text) {
+            stockWarning.style.display = 'block';
+            if (type === 'error') {
+                stockWarning.style.backgroundColor = 'rgba(255, 107, 107, 0.1)';
+                stockWarning.style.color = '#ff6b6b';
+                stockWarning.style.border = '1px solid #ff6b6b';
+            } else {
+                stockWarning.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+                stockWarning.style.color = 'var(--accent-color)'; 
+                stockWarning.style.border = '1px solid var(--accent-color)';
+            }
+            stockWarning.innerHTML = text;
+        }
+
+        function disableBtns(text) {
+            submitBtns.forEach(btn => { btn.disabled = true; btn.innerText = text; });
+        }
+
+        function enableBtns() {
+            submitBtns.forEach(btn => {
+                btn.disabled = false;
+                if(btn.classList.contains('btn-cart-outline')) btn.innerText = 'ADD TO CART';
+                if(btn.classList.contains('btn-buy-solid')) btn.innerText = 'ORDER NOW';
             });
+        }
+
+        // 🌟 ഗാലറി ഫോട്ടോകൾ മുഴുവനായി മാറ്റാനുള്ള ഫംഗ്ഷൻ 🌟
+        function updateGallery(colorName) {
+            const galleryContainer = document.getElementById('product-gallery-container');
+            let newHtml = '';
+
+            const mainUrl = colorImages[colorName] ? colorImages[colorName] : '{{ product.main_image.url }}';
+            newHtml += `<img src="${mainUrl}" class="grid-img" id="main-product-image" alt="Product">`;
+
+            if (colorGallery[colorName] && colorGallery[colorName].length > 0) {
+                colorGallery[colorName].slice(0, 3).forEach(url => {
+                    newHtml += `<img src="${url}" class="grid-img" alt="Gallery">`;
+                });
+            } else {
+                // ആ കളറിന് പ്രത്യേക ഗാലറി ഫോട്ടോ ഇല്ലെങ്കിൽ പഴയവ തന്നെ കാണിക്കാൻ
+                newHtml += `{% for image in product_gallery|slice:":3" %}<img src="{{ image.image.url }}" class="grid-img" alt="Gallery">{% endfor %}`;
+            }
+            galleryContainer.innerHTML = newHtml;
+        }
+
+        function checkStockAndImage() {
+            const sizeRadio = document.querySelector('input[name="size"]:checked');
+            const colorRadio = document.querySelector('input[name="color"]:checked');
+
+            let currentStock = -1;
+            let isColorOnly = false;
+            let isSizeOnly = false;
+
+            if (sizeRadio && colorRadio) {
+                const key = colorRadio.value + "_" + sizeRadio.value;
+                currentStock = variantStock[key] !== undefined ? variantStock[key] : -1;
+            } else if (colorRadio && !sizeRadio) {
+                currentStock = 0;
+                let found = false;
+                for (let key in variantStock) {
+                    if (key.startsWith(colorRadio.value + "_")) {
+                        currentStock += variantStock[key];
+                        found = true;
+                    }
+                }
+                if (!found) currentStock = -1;
+                isColorOnly = true;
+            } else if (!colorRadio && sizeRadio) {
+                currentStock = 0;
+                let found = false;
+                for (let key in variantStock) {
+                    if (key.endsWith("_" + sizeRadio.value)) {
+                        currentStock += variantStock[key];
+                        found = true;
+                    }
+                }
+                if (!found) currentStock = -1;
+                isSizeOnly = true;
+            }
+
+            if (currentStock === -1) {
+                if (sizeRadio && colorRadio) {
+                    showWarning('error', '<i class="fas fa-times-circle me-2"></i> Combination unavailable');
+                    disableBtns('UNAVAILABLE');
+                } else {
+                    stockWarning.style.display = 'none';
+                    enableBtns();
+                }
+            } else if (currentStock === 0) {
+                showWarning('error', '<i class="fas fa-times-circle me-2"></i> Out of Stock');
+                disableBtns('OUT OF STOCK');
+            } else if (currentStock <= 10) {
+                let msg = `Hurry! Only ${currentStock} left in stock.`;
+                if (isColorOnly) msg = `Hurry! Only ${currentStock} left in this color.`;
+                if (isSizeOnly) msg = `Hurry! Only ${currentStock} left in this size.`;
+                showWarning('warning', `<i class="fas fa-exclamation-triangle me-2"></i> ${msg}`);
+                enableBtns();
+            } else {
+                stockWarning.style.display = 'none';
+                enableBtns();
+            }
+        }
+
+        // കളർ ക്ലിക്ക് ചെയ്യുമ്പോൾ
+        document.querySelectorAll('input[name="color"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                selectedColorText.innerText = this.value; 
+                updateGallery(this.value); // ഗാലറി മാറ്റുന്നു
+                errorMsg.style.display = 'none';
+                checkStockAndImage(); // സ്റ്റോക്ക് മാറ്റുന്നു
+            });
+        });
+
+        // സൈസ് ക്ലിക്ക് ചെയ്യുമ്പോൾ
+        document.querySelectorAll('input[name="size"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                errorMsg.style.display = 'none';
+                checkStockAndImage();
+            });
+        });
+        // പേജ് ലോഡ് ആകുമ്പോൾ ആദ്യത്തെ കളർ ഓട്ടോമാറ്റിക്കായി സെലക്ട് ചെയ്യാൻ
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const firstColorRadio = document.querySelector('input[name="color"]');
+        if (firstColorRadio) {
+            firstColorRadio.checked = true; // ആദ്യത്തെ കളർ ടിക് ചെയ്യുന്നു
+            
+            // ആ കളറിന്റെ പേര് കാണിക്കാൻ
+            if (selectedColorText) {
+                selectedColorText.innerText = firstColorRadio.value;
+            }
+            
+            // ആ കളറിലെ ഫോട്ടോകൾ മാത്രം ഗാലറിയിൽ കാണിക്കാൻ
+            updateGallery(firstColorRadio.value);
+            
+            // സ്റ്റോക്ക് അപ്ഡേറ്റ് ചെയ്യാൻ
+            checkStockAndImage();
+        }
         });
     </script>
 </body>

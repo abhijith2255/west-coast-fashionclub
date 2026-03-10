@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUXE | Exclusive Luxury Fashion</title>
+    <title>WEST COAST | Exclusive Luxury Fashion</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -22,8 +22,11 @@
         .navbar.scrolled { background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid var(--border-color); }
         .navbar-brand { font-size: 2.2rem; letter-spacing: 6px; color: var(--text-main) !important; font-weight: 500; transition: 0.4s; }
         .navbar.scrolled .navbar-brand { font-size: 1.8rem; }
-        .nav-icon { color: var(--text-main); font-size: 1.2rem; transition: 0.3s; text-decoration: none; position: relative; }
+        .nav-icon { color: var(--text-main); font-size: 1.2rem; transition: 0.3s; text-decoration: none; position: relative; cursor: pointer; }
         .nav-icon:hover { color: var(--accent-color); transform: translateY(-2px); }
+
+        /* Dropdown Menu CSS */
+        .dropdown-item:hover { color: var(--accent-color) !important; background: transparent; padding-left: 30px !important; }
 
         /* Full Screen Hero Section */
         .hero-section { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; background: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; background-attachment: fixed; }
@@ -38,30 +41,19 @@
         .scroll-indicator:hover { color: var(--accent-color); }
         .scroll-indicator i { display: block; text-align: center; margin-top: 10px; font-size: 1.2rem; }
 
+        /* Category Boxes (New addition) */
+        .category-box { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 90px 20px; text-align: center; transition: 0.4s; height: 100%; display: flex; flex-direction: column; justify-content: center; text-decoration: none; }
+        .category-box:hover { border-color: var(--accent-color); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.08); }
+
         /* Premium Product Grid */
-        .collection-section { padding: 100px 0; }
+        .collection-section { padding: 80px 0; }
         .section-header { text-align: center; margin-bottom: 60px; }
         .section-title { font-size: 2.5rem; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; }
         .section-desc { color: var(--text-muted); font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }
         
         .product-card { display: block; text-decoration: none; color: var(--text-main); margin-bottom: 50px; position: relative; cursor: pointer; }
-/* പ്രോഡക്റ്റ് ഇമേജ് കൃത്യമായ വലിപ്പത്തിൽ നിർത്താൻ */
-        .img-container { 
-            overflow: hidden; 
-            aspect-ratio: 4 / 5; /* ഈ വരിയാണ് ചിത്രത്തിന്റെ നീളം നിയന്ത്രിക്കുന്നത് */
-            position: relative; 
-            border: 1px solid transparent; 
-            transition: 0.5s ease; 
-            background-color: var(--bg-secondary); /* ചിത്രം ലോഡ് ആകുന്നതിന് മുൻപ് കാണാൻ */
-        }
-        
-        .product-img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; /* ചിത്രം വലിഞ്ഞു പോകാതെ ബോക്സിൽ ഒതുങ്ങാൻ */
-            transition: 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-            filter: brightness(0.85); 
-        }
+        .img-container { overflow: hidden; aspect-ratio: 4 / 5; position: relative; border: 1px solid transparent; transition: 0.5s ease; background-color: var(--bg-secondary); }
+        .product-img { width: 100%; height: 100%; object-fit: cover; transition: 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); filter: brightness(0.85); }
         .product-card:hover .img-container { border-color: var(--border-color); }
         .product-card:hover .product-img { transform: scale(1.08); filter: brightness(1.1); }
         
@@ -100,15 +92,9 @@
             .hero-title { font-size: 2.8rem; letter-spacing: 5px; }
             .hero-subtitle { font-size: 0.65rem; letter-spacing: 3px; }
             .section-title { font-size: 1.6rem; letter-spacing: 2px; }
-            .img-container { 
-                aspect-ratio: 1 / 1.2; /* ചിത്രം അധികം താഴേക്ക് നീണ്ടു പോകാതിരിക്കാൻ */
-            }
-            .product-card { 
-                margin-bottom: 20px; 
-            }
-            
+            .img-container { aspect-ratio: 1 / 1.2; }
+            .product-card { margin-bottom: 20px; }
             .collection-section { padding: 60px 0; }
-            .product-card { margin-bottom: 30px; }
             .product-info { padding: 15px 5px; }
             .product-title { font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 5px; }
             .product-rating { font-size: 0.65rem; margin-bottom: 5px; }
@@ -124,11 +110,26 @@
 
     <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
         <div class="container d-flex justify-content-between align-items-center">
-            <a href="#" class="nav-icon"><i class="fas fa-bars"></i></a>
+            
+            <div class="dropdown">
+                <a href="#" class="nav-icon" id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="menuDropdown" style="background-color: #121212; border: 1px solid var(--accent-color); margin-top: 25px; border-radius: 0; min-width: 200px;">
+                    <li><a class="dropdown-item" href="{% url 'home' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">HOME</a></li>
+                    <li><hr class="dropdown-divider" style="border-color: #333; margin: 0;"></li>
+                    <li><a class="dropdown-item" href="{% url 'store_by_gender' 'men' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">SHOP MEN</a></li>
+                    <li><a class="dropdown-item" href="{% url 'store_by_gender' 'women' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">SHOP WOMEN</a></li>
+                    <li><hr class="dropdown-divider" style="border-color: #333; margin: 0;"></li>
+                    <li><a class="dropdown-item" href="{% url 'my_orders' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">MY ORDERS</a></li>
+                </ul>
+            </div>
+
             <a class="navbar-brand m-0 d-flex flex-column align-items-center text-decoration-none" href="{% url 'home' %}" style="line-height: 1;">
                 <span class="brand-font" style="font-size: 1.8rem; letter-spacing: 6px; color: var(--text-main);">WEST COAST</span>
                 <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 8px; font-weight: 600; color: var(--accent-color); margin-top: 5px;">FASHION CLUB</span>
             </a>
+
             <a href="{% url 'cart' %}" class="nav-icon position-relative">
                 <i class="fas fa-shopping-bag"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" style="background: var(--accent-color); color: #000; font-size: 0.55rem; font-family: 'Montserrat', sans-serif;">{{ cart_count|default:"0" }}</span>
@@ -143,7 +144,28 @@
             <h1 class="hero-title brand-font">The Art of<br>Elegance</h1>
             <a href="#collection" class="btn-discover">Discover Collection</a>
         </div>
-        <a href="#collection" class="scroll-indicator">Scroll <i class="fas fa-chevron-down"></i></a>
+        <a href="#categories" class="scroll-indicator">Scroll <i class="fas fa-chevron-down"></i></a>
+    </section>
+
+    <section id="categories" class="container my-5 pt-5 reveal">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <a href="{% url 'store_by_gender' 'men' %}" class="text-decoration-none">
+                    <div class="category-box">
+                        <h2 style="color: var(--accent-color); font-family: 'Cinzel', serif; letter-spacing: 4px; margin: 0; font-size: 2.2rem;">SHOP MEN</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem; letter-spacing: 3px; margin-top: 15px; text-transform: uppercase;">Discover the Collection</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'store_by_gender' 'women' %}" class="text-decoration-none">
+                    <div class="category-box">
+                        <h2 style="color: var(--accent-color); font-family: 'Cinzel', serif; letter-spacing: 4px; margin: 0; font-size: 2.2rem;">SHOP WOMEN</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem; letter-spacing: 3px; margin-top: 15px; text-transform: uppercase;">Discover the Collection</p>
+                    </div>
+                </a>
+            </div>
+        </div>
     </section>
 
     <section id="collection" class="collection-section container">
@@ -152,11 +174,14 @@
             <div class="section-desc">Curated pieces for the modern aesthetic</div>
         </div>
         
-        <div class="row g-3 g-md-4"> {% for product in products %}
+        <div class="row g-3 g-md-4"> 
+            {% for product in products %}
             <div class="col-6 col-md-4 col-lg-3 reveal" style="transition-delay: {{ forloop.counter0|add:1 }}00ms;">
                 <a href="{{ product.get_url }}" class="product-card">
                     <div class="img-container">
+                        {% if product.main_image %}
                         <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="product-img">
+                        {% endif %}
                         <div class="quick-view">Explore Details</div>
                     </div>
                     <div class="product-info">
@@ -210,8 +235,8 @@
                     <h4 class="footer-heading">Boutique</h4>
                     <ul class="footer-links">
                         <li><a href="#">New Arrivals</a></li>
-                        <li><a href="#">Men's Collection</a></li>
-                        <li><a href="#">Women's Collection</a></li>
+                        <li><a href="{% url 'store_by_gender' 'men' %}">Men's Collection</a></li>
+                        <li><a href="{% url 'store_by_gender' 'women' %}">Women's Collection</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
@@ -231,7 +256,15 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; {% now "Y" %} LUXE FASHION HOUSE. ALL RIGHTS RESERVED.
+                <div class="secure-payments text-center mt-5 pt-4" style="border-top: 1px solid var(--border-color);">
+                <p style="font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px;">100% Secure Payments</p>
+                <div class="d-flex justify-content-center gap-4 align-items-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay Secured" style="height: 22px; filter: grayscale(100%) brightness(200%); transition: 0.4s;" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale(100%) brightness(200%)'">
+                    <i class="fab fa-cc-visa" style="font-size: 1.8rem; color: #888; transition: 0.3s;" onmouseover="this.style.color='#1a1f71'" onmouseout="this.style.color='#888'"></i>
+                    <i class="fab fa-cc-mastercard" style="font-size: 1.8rem; color: #888; transition: 0.3s;" onmouseover="this.style.color='#eb001b'" onmouseout="this.style.color='#888'"></i>
+                </div>
+            </div>
+                &copy; {% now "Y" %} WEST COAST FASHION CLUB. ALL RIGHTS RESERVED.
             </div>
         </div>
     </footer>

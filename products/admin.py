@@ -1,57 +1,64 @@
 from django.contrib import admin
-from .models import Category, Size, Color, Product, ProductGallery, Cart, CartItem, Order, OrderItem, ReviewRating
+from .models import Category, Size, Color, Product, ProductVariant, ProductGallery, Cart, CartItem, Order, OrderItem, ReviewRating
 
 # 1. Category Admin
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = ('name', 'slug')
 
-# 2. Product Gallery Inline
+# 2. Product Gallery Inline (ഇവിടെയാണ് ഓരോ കളറിനുമുള്ള ഫോട്ടോകൾ ആഡ് ചെയ്യുന്നത്)
 class ProductGalleryInline(admin.TabularInline):
     model = ProductGallery
     extra = 1
 
-# 3. Product Admin
+# 3. Product Variant Inline (ഇവിടെയാണ് കളർ, സൈസ്, സ്റ്റോക്ക് എന്നിവ ആഡ് ചെയ്യുന്നത്)
+class ProductVariantInline(admin.TabularInline):
+    model = ProductVariant
+    extra = 1
+
+# 4. Product Admin (പ്രധാന പ്രൊഡക്റ്റ് പേജ്)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'stock', 'manual_review_count', 'manual_avg_rating', 'is_active')
+    list_display = ('name', 'price', 'category', 'gender', 'is_active', 'modified_at')
     prepopulated_fields = {'slug': ('name',)}
-    inlines = [ProductGalleryInline]
-    list_editable = ('price', 'stock', 'manual_review_count', 'manual_avg_rating', 'is_active') 
-    list_filter = ('category', 'is_active', 'is_trending')
-# 4. Order Item Inline
-class OrderItemInline(admin.TabularInline):
-    model = OrderItem
-    readonly_fields = ('product', 'quantity', 'price', 'size', 'color')
-    can_delete = False
-    extra = 0
+    list_filter = ('category', 'gender', 'is_active')
+    search_fields = ('name', 'description')
+    
+    # പ്രൊഡക്റ്റ് ആഡ് ചെയ്യുന്ന പേജിൽ തന്നെ ഗാലറിയും വേരിയൻ്റുകളും കാണിക്കാൻ
+    inlines = [ProductGalleryInline, ProductVariantInline]
 
-# 5. Order Admin
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_id', 'full_name', 'email', 'total_amount', 'is_paid', 'created_at')
-    list_filter = ('is_paid', 'created_at')
-    search_fields = ('order_id', 'full_name', 'email', 'phone')
-    readonly_fields = ('order_id', 'payment_id', 'total_amount', 'created_at')
-    inlines = [OrderItemInline] # ഓർഡർ ഡീറ്റൈൽസിൽ തന്നെ കസ്റ്റമർ എന്തൊക്കെ വാങ്ങി എന്ന് കാണാൻ
-
-# 6. Review Admin
-class ReviewRatingAdmin(admin.ModelAdmin):
-    list_display = ('product', 'name', 'rating', 'status', 'created_at')
-    list_editable = ('status',)
-    list_filter = ('status', 'rating')
-
-# 7. Cart Models (Usually for debugging only)
+# 5. Cart Admin
 class CartAdmin(admin.ModelAdmin):
     list_display = ('cart_id', 'date_added')
 
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('product', 'cart', 'quantity', 'is_active')
+    list_display = ('product', 'cart', 'quantity', 'size', 'color', 'is_active')
 
-# Registering Models
+# 6. Order Admin
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('order_id', 'full_name', 'email', 'total_amount', 'is_paid', 'created_at')
+    list_filter = ('is_paid', 'created_at')
+    search_fields = ('order_id', 'full_name', 'email', 'phone')
+    list_per_page = 20
+
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product', 'quantity', 'price', 'size', 'color')
+
+# 7. Review Rating Admin
+class ReviewRatingAdmin(admin.ModelAdmin):
+    list_display = ('product', 'name', 'rating', 'status', 'created_at')
+    list_filter = ('status', 'rating')
+    search_fields = ('product__name', 'name', 'review_text')
+
+
+# --- Registering Models ---
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Size)
 admin.site.register(Color)
 admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductVariant)
+admin.site.register(ProductGallery)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem, CartItemAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(ReviewRating, ReviewRatingAdmin)

@@ -3,119 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmed | LUXE</title>
+    <title>Payment Successful | WEST COAST FASHION CLUB</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    
     <style>
-        :root { --primary-color: #111; --text-muted: #888; --bg-light: #fafafa; --success-color: #2b8a3e; }
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-light); color: var(--primary-color); padding-top: 40px; padding-bottom: 80px; }
-        h1, h2, h3, .brand-font { font-family: 'Playfair Display', serif; }
-
-        /* Minimal Navbar */
-        .navbar { background: transparent; padding: 20px 0; margin-bottom: 30px; }
-        .navbar-brand { font-size: 2rem; letter-spacing: 5px; font-weight: 600; color: #111 !important; text-decoration: none; margin: 0 auto; display: block; text-align: center; }
-
-        /* Success Card */
-        .success-card { background: #fff; padding: 60px 50px; border-radius: 2px; box-shadow: 0 15px 35px rgba(0,0,0,0.03); max-width: 600px; margin: 0 auto; text-align: center; border: 1px solid #eee; position: relative; overflow: hidden; }
-        
-        /* Animated Checkmark */
-        .success-animation { margin: 0 auto 30px auto; width: 80px; height: 80px; }
-        .checkmark { width: 80px; height: 80px; border-radius: 50%; display: block; stroke-width: 2; stroke: #fff; stroke-miterlimit: 10; box-shadow: inset 0px 0px 0px var(--success-color); animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both; background-color: var(--success-color); }
-        .checkmark__circle { stroke-dasharray: 166; stroke-dashoffset: 166; stroke-width: 2; stroke-miterlimit: 10; stroke: var(--success-color); fill: none; animation: stroke .6s cubic-bezier(0.65, 0, 0.45, 1) forwards; }
-        .checkmark__check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; animation: stroke .3s cubic-bezier(0.65, 0, 0.45, 1) .8s forwards; }
-
-        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
-        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
-        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 50px var(--success-color); } }
-
-        /* Typography */
-        .success-title { font-size: 2.2rem; font-weight: 600; margin-bottom: 15px; color: #111; }
-        .success-subtitle { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6; }
-
-        /* Order Details Box */
-        .order-details-box { background: var(--bg-light); border: 1px dashed #ccc; padding: 25px; border-radius: 2px; text-align: left; margin-bottom: 40px; }
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.85rem; }
-        .detail-row:last-child { margin-bottom: 0; }
-        .detail-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; font-size: 0.75rem; }
-        .detail-value { font-weight: 600; color: #111; }
-
-        /* Action Buttons */
-        .btn-continue { background: #111; color: #fff; width: 100%; border: 1px solid #111; padding: 18px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; font-size: 0.85rem; transition: all 0.4s ease; text-decoration: none; display: inline-block; border-radius: 2px; }
-        .btn-continue:hover { background: #fff; color: #111; letter-spacing: 3px; }
-        
-        .contact-link { display: inline-block; margin-top: 25px; font-size: 0.75rem; color: var(--text-muted); text-decoration: underline; text-underline-offset: 4px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .contact-link:hover { color: #111; }
-
-        /* Print styling */
-        @media print {
-            body { background: #fff; }
-            .success-card { box-shadow: none; border: none; padding: 0; }
-            .btn-continue, .contact-link { display: none; }
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            padding-top: 80px;
+        }
+        .success-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+            background-color: #121212;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.05);
+        }
+        .success-icon {
+            font-size: 4.5rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        .order-details {
+            margin-top: 35px;
+            padding: 25px;
+            border-top: 1px dashed #333;
+            border-bottom: 1px dashed #333;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+        .detail-value {
+            color: #fff;
+            font-weight: 500;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .btn-continue {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 40px;
+            background-color: #d4af37;
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            border: 1px solid #d4af37;
+        }
+        .btn-continue:hover {
+            background-color: transparent;
+            color: #d4af37;
+        }
+        .brand-text {
+            margin-top: 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="container">
-            <a class="navbar-brand m-0 d-flex flex-column align-items-center text-decoration-none" href="{% url 'home' %}" style="line-height: 1;">
-                <span class="brand-font" style="font-size: 1.8rem; letter-spacing: 6px; color: var(--text-main);">WEST COAST</span>
-                <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 8px; font-weight: 600; color: var(--accent-color); margin-top: 5px;">FASHION CLUB</span>
-            </a>
-        </div>
-    </header>
-
     <div class="container">
-        <div class="success-card">
-            
-            <div class="success-animation">
-                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                </svg>
-            </div>
+        <div class="success-container">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h1>Payment Successful</h1>
+            <p style="color: #aaa; letter-spacing: 1px; font-size: 0.9rem;">Thank you for your premium purchase.</p>
 
-            <h1 class="success-title brand-font">Thank You!</h1>
-            <p class="success-subtitle">
-                Your order has been placed successfully.<br>
-                We've sent a confirmation email with your order details.
-            </p>
-
-            <div class="order-details-box">
+            <div class="order-details">
                 <div class="detail-row">
-                    <span class="detail-label">Order Number:</span>
-                    <span class="detail-value">#{{ order_id }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Payment ID:</span>
+                    <span>Payment ID</span>
                     <span class="detail-value">{{ payment_id }}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">Date:</span>
-                    <span class="detail-value">{% now "d M Y, h:i A" %}</span>
+                    <span>Order Number</span>
+                    <span class="detail-value">#{{ order_id }}</span>
                 </div>
-                <hr style="border-top: 1px dashed #ccc; margin: 15px 0;">
                 <div class="detail-row">
-                    <span class="detail-label">Payment Status:</span>
-                    <span class="detail-value text-success"><i class="fas fa-check-circle me-1"></i> Paid Successfully</span>
+                    <span>Status</span>
+                    <span class="detail-value" style="color: #4CAF50;">Confirmed</span>
                 </div>
             </div>
 
-            <a href="{% url 'home' %}" class="btn-continue">Continue Shopping</a>
-            
-            <div>
-                <a href="#" class="contact-link" onclick="window.print(); return false;">
-                    <i class="fas fa-print me-1"></i> Print Receipt
-                </a>
-            </div>
-            
-            <p class="mt-4 pt-3 border-top small text-muted" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                Need help? <a href="#" class="text-dark fw-bold text-decoration-none">Contact Support</a>
+            <p style="margin-top: 25px; font-size: 0.8rem; color: #777; line-height: 1.6;">
+                We have received your order and will begin processing it shortly. You will receive an email confirmation soon.
             </p>
 
+            <a href="{% url 'home' %}" class="btn-continue">Continue Shopping</a>
         </div>
+        
+        <div class="brand-text">WEST COAST FASHION CLUB</div>
     </div>
 
 </body>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ current_gender }} Collection | WEST COAST FASHION CLUB</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root { 
+            --bg-main: #0a0a0a; --bg-secondary: #121212; --text-main: #ffffff; 
+            --text-muted: #888888; --border-color: #222222; --accent-color: #d4af37; 
+        }
+        
+        body { font-family: 'Montserrat', sans-serif; color: var(--text-main); background-color: var(--bg-main); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        h1, h2, h3, .brand-font { font-family: 'Cinzel', serif; letter-spacing: 2px; }
+
+        /* Premium Navbar (Same as Home) */
+        .navbar { background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid var(--border-color); z-index: 1000; }
+        .navbar-brand { font-size: 1.8rem; letter-spacing: 6px; color: var(--text-main) !important; font-weight: 500; transition: 0.4s; }
+        .nav-icon { color: var(--text-main); font-size: 1.2rem; transition: 0.3s; text-decoration: none; cursor: pointer; }
+        .nav-icon:hover { color: var(--accent-color); transform: translateY(-2px); }
+        .dropdown-item:hover { color: var(--accent-color) !important; background: transparent; padding-left: 30px !important; }
+
+        /* Store Header Section */
+        .store-header { padding: 150px 0 50px; text-align: center; background: linear-gradient(to bottom, #111 0%, var(--bg-main) 100%); border-bottom: 1px solid var(--border-color); }
+        .store-title { font-size: 3rem; text-transform: uppercase; letter-spacing: 8px; margin-bottom: 15px; color: var(--accent-color); animation: fadeUp 1s ease; }
+        .store-subtitle { color: var(--text-muted); font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; }
+
+        /* Horizontal Filter Bar */
+        .filter-bar { padding: 20px 0; border-bottom: 1px solid var(--border-color); background-color: var(--bg-main); position: sticky; top: 70px; z-index: 900; }
+        .filter-list { list-style: none; padding: 0; margin: 0; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .filter-list a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; padding-bottom: 5px; border-bottom: 2px solid transparent; }
+        .filter-list a:hover, .filter-list a.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
+
+        /* Premium Product Grid (Same as Home) */
+        .collection-section { padding: 60px 0; }
+        .product-card { display: block; text-decoration: none; color: var(--text-main); margin-bottom: 50px; position: relative; cursor: pointer; }
+        .img-container { overflow: hidden; aspect-ratio: 4 / 5; position: relative; border: 1px solid transparent; transition: 0.5s ease; background-color: var(--bg-secondary); }
+        .product-img { width: 100%; height: 100%; object-fit: cover; transition: 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); filter: brightness(0.85); }
+        .product-card:hover .img-container { border-color: var(--border-color); }
+        .product-card:hover .product-img { transform: scale(1.08); filter: brightness(1.1); }
+        
+        .quick-view { position: absolute; bottom: -50px; left: 0; width: 100%; background: rgba(10, 10, 10, 0.9); padding: 15px 0; text-align: center; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); transition: 0.4s ease; opacity: 0; }
+        .product-card:hover .quick-view { bottom: 0; opacity: 1; }
+        
+        .product-info { padding: 25px 0; text-align: center; }
+        .product-title { font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 8px; letter-spacing: 2px; color: var(--text-main); transition: 0.3s; }
+        .product-card:hover .product-title { color: var(--accent-color); }
+        
+        .product-rating { font-size: 0.75rem; margin-bottom: 10px; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .star-icon { color: var(--accent-color); font-size: 0.7rem; }
+        .rating-number { color: var(--text-main); font-weight: 500; }
+        .review-count { color: var(--text-muted); }
+
+        .product-price { color: var(--text-muted); font-size: 0.95rem; font-family: 'Montserrat', sans-serif; }
+        .discount-price { color: var(--text-main); font-weight: 500; margin-right: 10px; }
+
+        /* Empty State */
+        .empty-state { padding: 100px 0; text-align: center; }
+        .empty-icon { font-size: 4rem; color: var(--border-color); margin-bottom: 20px; }
+        .btn-gold { border: 1px solid var(--accent-color); color: var(--accent-color); background: transparent; padding: 15px 40px; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; font-size: 0.8rem; transition: 0.4s; display: inline-block; margin-top: 20px; }
+        .btn-gold:hover { background: var(--accent-color); color: #000; }
+
+        /* Footer */
+        .premium-footer { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 80px 0 30px 0; margin-top: 50px; text-align: center; }
+        .footer-brand { font-family: 'Cinzel', serif; font-size: 1.5rem; letter-spacing: 4px; color: var(--accent-color); margin-bottom: 20px; }
+        .footer-text { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 1px; }
+
+        /* Scroll Reveal Animation */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .store-title { font-size: 2rem; letter-spacing: 4px; }
+            .filter-list { gap: 15px; }
+            .filter-list a { font-size: 0.7rem; }
+            .img-container { aspect-ratio: 1 / 1.2; }
+            .product-card { margin-bottom: 20px; }
+            .product-info { padding: 15px 5px; }
+            .product-title { font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 5px; }
+            .product-price { font-size: 0.85rem; }
+            .quick-view { font-size: 0.65rem; padding: 10px 0; }
+        }
+
+        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="dropdown">
+                <a href="#" class="nav-icon" id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="menuDropdown" style="background-color: #121212; border: 1px solid var(--accent-color); margin-top: 25px; border-radius: 0; min-width: 200px;">
+                    <li><a class="dropdown-item" href="{% url 'home' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">HOME</a></li>
+                    <li><hr class="dropdown-divider" style="border-color: #333; margin: 0;"></li>
+                    <li><a class="dropdown-item" href="{% url 'store_by_gender' 'men' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">SHOP MEN</a></li>
+                    <li><a class="dropdown-item" href="{% url 'store_by_gender' 'women' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">SHOP WOMEN</a></li>
+                    <li><hr class="dropdown-divider" style="border-color: #333; margin: 0;"></li>
+                    <li><a class="dropdown-item" href="{% url 'my_orders' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">MY ORDERS</a></li>
+                </ul>
+            </div>
+
+            <a class="navbar-brand m-0 d-flex flex-column align-items-center text-decoration-none" href="{% url 'home' %}" style="line-height: 1;">
+                <span class="brand-font" style="font-size: 1.8rem; letter-spacing: 6px; color: var(--text-main);">WEST COAST</span>
+                <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 8px; font-weight: 600; color: var(--accent-color); margin-top: 5px;">FASHION CLUB</span>
+            </a>
+
+            <a href="{% url 'cart' %}" class="nav-icon position-relative">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" style="background: var(--accent-color); color: #000; font-size: 0.55rem; font-family: 'Montserrat', sans-serif;">{{ cart_count|default:"0" }}</span>
+            </a>
+        </div>
+    </nav>
+
+    <header class="store-header">
+        <div class="container">
+            <h1 class="store-title brand-font">{{ current_gender|default:"Our" }} Collection</h1>
+            <p class="store-subtitle">{{ product_count }} Exclusive Pieces Available</p>
+        </div>
+    </header>
+
+    <div class="filter-bar">
+        <div class="container">
+            <ul class="filter-list">
+                <li><a href="{% if current_gender %}{% url 'store_by_gender' current_gender|lower %}{% else %}{% url 'home' %}{% endif %}" class="active">ALL</a></li>
+                <li><a href="{% url 'store_by_gender_category' current_gender|lower 'shirts' %}">SHIRTS</a></li>
+                <li><a href="{% url 'store_by_gender_category' current_gender|lower 't-shirts' %}">T-SHIRTS</a></li>
+                <li><a href="{% url 'store_by_gender_category' current_gender|lower 'shoes' %}">FOOTWEAR</a></li>
+                <li><a href="{% url 'store_by_gender_category' current_gender|lower 'watches' %}">WATCHES</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <section class="collection-section container">
+        <div class="row g-3 g-md-4"> 
+            {% for product in products %}
+            <div class="col-6 col-md-4 col-lg-3 reveal" style="transition-delay: {{ forloop.counter0|add:1 }}00ms;">
+                <a href="{{ product.get_url }}" class="product-card">
+                    <div class="img-container">
+                        {% if product.main_image %}
+                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="product-img">
+                        {% endif %}
+                        <div class="quick-view">Explore Details</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">{{ product.name }}</h3>
+                        
+                        <div class="product-rating">
+                            {% if product.get_review_count > 0 %}
+                                <i class="fas fa-star star-icon"></i>
+                                <span class="rating-number">{{ product.get_avg_rating }}</span>
+                                <span class="review-count">({{ product.get_review_count }})</span>
+                            {% else %}
+                                <span class="review-count" style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px;">New Arrival</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-price">
+                            {% if product.discount_price %}
+                                <span class="discount-price">₹{{ product.discount_price }}</span>
+                                <del>₹{{ product.price }}</del>
+                            {% else %}
+                                <span>₹{{ product.price }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 empty-state reveal">
+                <i class="fas fa-box-open empty-icon"></i>
+                <h3 class="brand-font" style="color: var(--text-main); font-size: 1.5rem; letter-spacing: 2px;">No Pieces Found</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">We are preparing new exclusive drops for this category.</p>
+                <a href="{% url 'home' %}" class="btn-gold">Return to Home</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <footer class="premium-footer reveal">
+        <div class="container">
+            <div class="footer-brand">WEST COAST FASHION CLUB</div>
+            <p class="footer-text mb-4">Redefining streetwear luxury with premium materials and exclusive drops.</p>
+            
+            <div class="d-flex justify-content-center gap-4 align-items-center mt-4 mb-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay Secured" style="height: 18px; filter: grayscale(100%) brightness(200%);">
+                <i class="fab fa-cc-visa" style="font-size: 1.5rem; color: #888;"></i>
+                <i class="fab fa-cc-mastercard" style="font-size: 1.5rem; color: #888;"></i>
+            </div>
+
+            <p class="footer-text" style="font-size: 0.7rem; letter-spacing: 2px;">&copy; {% now "Y" %} WEST COAST FASHION CLUB. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Scroll reveal logic
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 50;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Trigger on load
+    </script>
+</body>
+</html>
