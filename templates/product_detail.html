@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,51 +31,43 @@
         .grid-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border: 1px solid var(--border-color); border-radius: 4px; transition: 0.3s ease-in-out; }
 
         .product-title { font-size: 1.8rem; text-transform: uppercase; font-weight: 500; margin-bottom: 5px; }
-        .product-price-box { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        .product-price-box { display: flex; align-items: baseline; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
         .current-price { font-size: 1.8rem; color: var(--accent-color); font-family: 'Cinzel', serif; font-weight: 600; }
         .original-price { font-size: 1rem; color: var(--text-muted); text-decoration: line-through; }
 
+       /* 🌟 Premium Description Block 🌟 */
+        .premium-desc-block { margin-bottom: 30px; padding: 15px 20px; background: rgba(212, 175, 55, 0.03); border-left: 3px solid var(--accent-color); border-radius: 0 6px 6px 0; }
+        .desc-label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-bottom: 8px; font-weight: 600; }
+        .desc-text { color: #dddddd; font-size: 0.95rem; line-height: 1.7; margin: 0; font-weight: 400; white-space: pre-line; text-transform: capitalize; }
         /* Info Boxes */
         .info-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; margin-bottom: 25px; }
-        .box-title { font-size: 1rem; font-weight: 600; margin-bottom: 15px; display: block; }
+        .box-title { font-size: 1rem; font-weight: 600; margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); }
         .delivery-location { color: var(--accent-color); font-size: 0.85rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
         .delivery-date-row { display: flex; align-items: flex-start; gap: 15px; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px; }
         .trust-icons { display: flex; justify-content: space-around; text-align: center; }
-        .trust-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-muted); }
+        .trust-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .trust-item i { font-size: 1.2rem; color: var(--accent-color); }
 
         /* Highlights */
         .highlights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.85rem; }
         .highlight-item { display: flex; flex-direction: column; }
-        .highlight-label { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 2px; }
-        .highlight-value { color: var(--text-main); font-weight: 500; }
+        .highlight-label { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+        .highlight-value { color: var(--text-main); font-weight: 500; text-transform: uppercase; }
 
-        /* Size Selectors */
-        .selector-title { font-size: 0.85rem; text-transform: uppercase; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); display: block; }
+        /* Selectors */
+        .selector-title { font-size: 0.85rem; text-transform: uppercase; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); display: block; letter-spacing: 1px; }
         .size-selector input { display: none; }
-        .size-selector label { display: inline-block; padding: 8px 15px; border: 1px solid var(--border-color); margin: 0 5px 10px 0; cursor: pointer; transition: 0.3s; font-size: 0.85rem; border-radius: 4px; }
+        .size-selector label { display: inline-block; padding: 8px 15px; border: 1px solid var(--border-color); margin: 0 5px 10px 0; cursor: pointer; transition: 0.3s; font-size: 0.85rem; border-radius: 4px; font-weight: 500; }
         .size-selector input:checked + label { border-color: var(--accent-color); background: var(--accent-color); color: #000; font-weight: 600; }
 
-        /* 🌟 Flipkart Style Color Thumbnails CSS 🌟 */
         .color-thumbnail-selector { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
         .color-thumbnail-selector input { display: none; }
-        .color-thumbnail-selector label { 
-            width: 65px; height: 85px; 
-            border: 2px solid var(--border-color); 
-            cursor: pointer; transition: 0.3s; 
-            padding: 3px; border-radius: 4px; background: var(--bg-card);
-        }
-        .color-thumbnail-selector label img { 
-            width: 100%; height: 100%; object-fit: cover; border-radius: 2px; 
-        }
-        .color-thumbnail-selector input:checked + label { 
-            border-color: var(--accent-color); 
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
+        .color-thumbnail-selector label { width: 65px; height: 85px; border: 2px solid var(--border-color); cursor: pointer; transition: 0.3s; padding: 3px; border-radius: 4px; background: var(--bg-card); }
+        .color-thumbnail-selector label img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
+        .color-thumbnail-selector input:checked + label { border-color: var(--accent-color); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
 
-        /* Error & Warning */
-        #selection-error { display: none; color: #ff6b6b; font-size: 0.85rem; margin-bottom: 15px; font-weight: 500; border-left: 2px solid #ff6b6b; padding-left: 10px; }
+        /* Alerts */
+        #selection-error { display: none; color: #ff6b6b; font-size: 0.85rem; margin-bottom: 15px; font-weight: 500; border-left: 2px solid #ff6b6b; padding-left: 10px; background: rgba(255, 107, 107, 0.05); padding: 10px; }
         #dynamic-stock-warning { display: none; font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; padding: 12px; border-radius: 4px; }
 
         /* Action Buttons */
@@ -90,18 +83,37 @@
             .btn-cart-outline, .btn-buy-solid { padding: 15px 10px; font-size: 0.8rem; letter-spacing: 1px; } 
         }
 
-        /* Premium Footer */
+        /* 🌟 Premium Footer CSS 🌟 */
         .premium-footer { background: var(--bg-card); border-top: 1px solid var(--border-color); padding: 80px 0 30px 0; margin-top: 60px; }
-        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 60px; text-align: center; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
+        .footer-heading { font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 30px; letter-spacing: 3px; color: var(--text-main); text-transform: uppercase; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: 0.3s; letter-spacing: 1px; text-transform: uppercase; }
+        .footer-links a:hover { color: var(--accent-color); padding-left: 8px; }
+        .social-icons a { width: 45px; height: 45px; border: 1px solid var(--border-color); display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); border-radius: 50%; transition: 0.4s; text-decoration: none; margin-right: 10px; font-size: 1.2rem; }
+        .social-icons a:hover { background: var(--accent-color); color: #000; border-color: var(--accent-color); transform: translateY(-5px); }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 25px; margin-top: 80px; text-align: center; color: var(--text-muted); font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <nav class="navbar fixed-top premium-nav">
         <div class="container d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center gap-3 w-25"><a href="#" class="nav-icon d-lg-none"><i class="fas fa-bars"></i></a><a href="#" class="nav-icon d-none d-lg-block"><i class="fas fa-search"></i></a><div class="d-none d-lg-flex gap-4 ms-3 nav-links-desktop"><a href="{% url 'store' %}">Shop</a></div></div>
-            <a class="navbar-brand m-0 d-flex flex-column align-items-center text-decoration-none w-50 text-center" href="{% url 'home' %}"><span class="brand-font" style="font-size: 1.6rem; letter-spacing: 5px; color: var(--text-main);">WEST COAST</span><span style="font-family: 'Montserrat', sans-serif; font-size: 0.5rem; letter-spacing: 8px; font-weight: 600; color: var(--accent-color); margin-top: 4px;">FASHION CLUB</span></a>
-            <div class="d-flex align-items-center justify-content-end gap-3 w-25"><a href="{% url 'my_orders' %}" class="nav-icon d-none d-lg-block"><i class="far fa-user"></i></a><a href="{% url 'cart' %}" class="nav-icon position-relative"><i class="fas fa-shopping-bag"></i><span class="cart-badge">{{ cart_count|default:"0" }}</span></a></div>
+            <div class="d-flex align-items-center gap-3 w-25">
+                <a href="#" class="nav-icon d-lg-none"><i class="fas fa-bars"></i></a>
+                <a href="#" class="nav-icon d-none d-lg-block"><i class="fas fa-search"></i></a>
+                <div class="d-none d-lg-flex gap-4 ms-3 nav-links-desktop"><a href="{% url 'store' %}">Shop</a></div>
+            </div>
+            
+            <a class="navbar-brand m-0 d-flex flex-column align-items-center text-decoration-none w-50 text-center" href="{% url 'home' %}">
+                <span class="brand-font" style="font-size: 1.6rem; letter-spacing: 5px; color: var(--text-main);">WEST COAST</span>
+                <span style="font-family: 'Montserrat', sans-serif; font-size: 0.5rem; letter-spacing: 8px; font-weight: 600; color: var(--accent-color); margin-top: 4px;">FASHION CLUB</span>
+            </a>
+            
+            <div class="d-flex align-items-center justify-content-end gap-3 w-25">
+                <a href="{% url 'my_orders' %}" class="nav-icon d-none d-lg-block"><i class="far fa-user"></i></a>
+                <a href="{% url 'cart' %}" class="nav-icon position-relative"><i class="fas fa-shopping-bag"></i><span class="cart-badge">{{ cart_count|default:"0" }}</span></a>
+            </div>
         </div>
     </nav>
 
@@ -121,22 +133,36 @@
                 <h1 class="product-title brand-font">{{ product.name }}</h1>
                 
                 <div class="mb-3 d-flex align-items-center">
-                    <div style="color: var(--accent-color); font-size: 1rem;">
-                        <i class="fas fa-star"></i> {{ average_rating|floatformat:1 }}
+                    <div style="color: var(--accent-color); font-size: 1rem; font-weight: 600;">
+                        <i class="fas fa-star"></i> 
+                        {% if product.get_review_count > 0 %}
+                            {{ product.get_avg_rating|floatformat:1 }}
+                        {% else %}
+                            NEW
+                        {% endif %}
                     </div>
-                    <div style="color: var(--text-muted); font-size: 0.85rem; margin-left: 10px; border-left: 1px solid var(--border-color); padding-left: 10px;">
-                        {{ review_count }} Ratings & Reviews
+                    <div style="color: var(--text-muted); font-size: 0.85rem; margin-left: 10px; border-left: 1px solid var(--border-color); padding-left: 10px; text-transform: uppercase; letter-spacing: 1px;">
+                        {% if product.get_review_count > 0 %}
+                            {{ product.get_review_count }} Ratings
+                        {% else %}
+                            Be the first to buy
+                        {% endif %}
                     </div>
                 </div>
                 
-                <div class="product-price-box mt-2">
+                <div class="product-price-box">
                     {% if product.discount_price %}
                         <div class="current-price">₹{{ product.discount_price }}</div>
                         <div class="original-price">₹{{ product.price }}</div>
-                        <div style="color: #388e3c; font-weight: 600; font-size: 0.9rem;">Special Price</div>
+                        <div style="color: #388e3c; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Special Price</div>
                     {% else %}
                         <div class="current-price">₹{{ product.price }}</div>
                     {% endif %}
+                </div>
+
+                <div class="premium-desc-block">
+                    <span class="desc-label">Product Details</span>
+                    <p class="desc-text">{{ product.description }}</p>
                 </div>
 
                 <form action="{% url 'add_to_cart' product.id %}" method="POST" id="productForm">
@@ -180,6 +206,14 @@
                     </div>
                 </form> 
 
+                <div class="info-box">
+                    <span class="box-title">Product Highlights</span>
+                    <div class="highlights-grid">
+                        <div class="highlight-item"><span class="highlight-label">Category</span><span class="highlight-value">{{ product.category.name }}</span></div>
+                        <div class="highlight-item"><span class="highlight-label">Gender</span><span class="highlight-value">{{ product.gender }}</span></div>
+                    </div>
+                </div>
+
                 <div class="info-box mt-4">
                     <span class="box-title">Delivery Details</span>
                     <div class="delivery-location"><i class="fas fa-map-marker-alt"></i> Location not set <span style="text-decoration: underline; font-size: 0.75rem; margin-left: 5px;">Select delivery location</span></div>
@@ -190,15 +224,7 @@
                     <div class="trust-icons">
                         <div class="trust-item"><i class="fas fa-undo"></i> 10-Day<br>Return</div>
                         <div class="trust-item"><i class="fas fa-rupee-sign"></i> Cash on<br>Delivery</div>
-                        <div class="trust-item"><i class="fas fa-shield-check"></i> WEST COAST<br>Assured</div>
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <span class="box-title">Product Highlights</span>
-                    <div class="highlights-grid">
-                        <div class="highlight-item"><span class="highlight-label">Category</span><span class="highlight-value">{{ product.category.name }}</span></div>
-                        <div class="highlight-item"><span class="highlight-label">Gender</span><span class="highlight-value">{{ product.gender }}</span></div>
+                        <div class="trust-item"><i class="fas fa-shield-alt"></i> WEST COAST<br>Assured</div>
                     </div>
                 </div>
 
@@ -206,10 +232,56 @@
         </div>
     </div>
 
-    <footer class="premium-footer">
+    <footer class="premium-footer reveal">
         <div class="container">
-            <div class="row"><div class="col-lg-4 mb-4"><div class="mb-4 d-flex flex-column" style="line-height: 1;"><span class="brand-font" style="font-size: 1.8rem; letter-spacing: 5px; color: var(--text-main);">WEST COAST</span></div><p class="text-muted" style="font-size: 0.8rem; line-height: 1.8;">Redefining streetwear luxury with premium materials and exclusive drops.</p></div></div>
-            <div class="footer-bottom">&copy; {% now "Y" %} WEST COAST FASHION CLUB. ALL RIGHTS RESERVED.</div>
+            <div class="row">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <div class="mb-4 d-flex flex-column" style="line-height: 1;">
+                        <span class="brand-font" style="font-size: 2.2rem; letter-spacing: 5px; color: var(--accent-color);">WEST COAST</span>
+                        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 10px; font-weight: 500; color: var(--text-main); margin-top: 8px;">FASHION CLUB</span>
+                    </div>
+                    <p class="text-muted pe-lg-4" style="font-size: 0.85rem; line-height: 2;">Redefining luxury fashion with premium materials and exclusive designs. Experience the pinnacle of craftsmanship.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h4 class="footer-heading">Boutique</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="{% url 'store_by_gender' 'men' %}">Men's Collection</a></li>
+                        <li><a href="{% url 'store_by_gender' 'women' %}">Women's Collection</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h4 class="footer-heading">Assistance</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'my_orders' %}">Track Order</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h4 class="footer-heading">Newsletter</h4>
+                    <div class="d-flex mt-4 border-bottom border-secondary pb-2">
+                        <input type="email" placeholder="Email Address" style="background: transparent; border: none; color: white; padding: 5px 0; width: 100%; outline: none; font-size: 0.85rem; letter-spacing: 1px;">
+                        <button style="background: transparent; color: var(--accent-color); border: none; padding: 0 10px; font-weight: 500; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer;">Join</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="secure-payments text-center mt-5 pt-4" style="border-top: 1px solid var(--border-color);">
+                    <p style="font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px;">100% Secure Payments</p>
+                    <div class="d-flex justify-content-center gap-4 align-items-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay Secured" style="height: 22px; filter: grayscale(100%) brightness(200%); transition: 0.4s;" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale(100%) brightness(200%)'">
+                        <i class="fab fa-cc-visa" style="font-size: 1.8rem; color: #888; transition: 0.3s;" onmouseover="this.style.color='#1a1f71'" onmouseout="this.style.color='#888'"></i>
+                        <i class="fab fa-cc-mastercard" style="font-size: 1.8rem; color: #888; transition: 0.3s;" onmouseover="this.style.color='#eb001b'" onmouseout="this.style.color='#888'"></i>
+                    </div>
+                </div>
+                &copy; {% now "Y" %} WEST COAST FASHION CLUB. ALL RIGHTS RESERVED.
+            </div>
         </div>
     </footer>
 
@@ -222,7 +294,7 @@
 
         const variantStock = JSON.parse('{{ variant_data|escapejs|default:"{}" }}');
         const colorImages = JSON.parse('{{ color_images|escapejs|default:"{}" }}'); 
-        const colorGallery = JSON.parse('{{ color_gallery|escapejs|default:"{}" }}'); // 🌟 ഗാലറി ഡാറ്റ 🌟
+        const colorGallery = JSON.parse('{{ color_gallery|escapejs|default:"{}" }}'); 
         
         const submitBtns = document.querySelectorAll('.submit-dynamic-btn');
         const stockWarning = document.getElementById('dynamic-stock-warning');
@@ -266,11 +338,9 @@
             });
         }
 
-        // 🌟 ഗാലറി ഫോട്ടോകൾ മുഴുവനായി മാറ്റാനുള്ള ഫംഗ്ഷൻ 🌟
         function updateGallery(colorName) {
             const galleryContainer = document.getElementById('product-gallery-container');
             let newHtml = '';
-
             const mainUrl = colorImages[colorName] ? colorImages[colorName] : '{{ product.main_image.url }}';
             newHtml += `<img src="${mainUrl}" class="grid-img" id="main-product-image" alt="Product">`;
 
@@ -279,7 +349,6 @@
                     newHtml += `<img src="${url}" class="grid-img" alt="Gallery">`;
                 });
             } else {
-                // ആ കളറിന് പ്രത്യേക ഗാലറി ഫോട്ടോ ഇല്ലെങ്കിൽ പഴയവ തന്നെ കാണിക്കാൻ
                 newHtml += `{% for image in product_gallery|slice:":3" %}<img src="{{ image.image.url }}" class="grid-img" alt="Gallery">{% endfor %}`;
             }
             galleryContainer.innerHTML = newHtml;
@@ -343,40 +412,30 @@
             }
         }
 
-        // കളർ ക്ലിക്ക് ചെയ്യുമ്പോൾ
         document.querySelectorAll('input[name="color"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 selectedColorText.innerText = this.value; 
-                updateGallery(this.value); // ഗാലറി മാറ്റുന്നു
+                updateGallery(this.value); 
                 errorMsg.style.display = 'none';
-                checkStockAndImage(); // സ്റ്റോക്ക് മാറ്റുന്നു
+                checkStockAndImage(); 
             });
         });
 
-        // സൈസ് ക്ലിക്ക് ചെയ്യുമ്പോൾ
         document.querySelectorAll('input[name="size"]').forEach(radio => {
             radio.addEventListener('change', () => {
                 errorMsg.style.display = 'none';
                 checkStockAndImage();
             });
         });
-        // പേജ് ലോഡ് ആകുമ്പോൾ ആദ്യത്തെ കളർ ഓട്ടോമാറ്റിക്കായി സെലക്ട് ചെയ്യാൻ
-    window.addEventListener('DOMContentLoaded', (event) => {
-        const firstColorRadio = document.querySelector('input[name="color"]');
-        if (firstColorRadio) {
-            firstColorRadio.checked = true; // ആദ്യത്തെ കളർ ടിക് ചെയ്യുന്നു
-            
-            // ആ കളറിന്റെ പേര് കാണിക്കാൻ
-            if (selectedColorText) {
-                selectedColorText.innerText = firstColorRadio.value;
+        
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const firstColorRadio = document.querySelector('input[name="color"]');
+            if (firstColorRadio) {
+                firstColorRadio.checked = true; 
+                if (selectedColorText) { selectedColorText.innerText = firstColorRadio.value; }
+                updateGallery(firstColorRadio.value);
+                checkStockAndImage();
             }
-            
-            // ആ കളറിലെ ഫോട്ടോകൾ മാത്രം ഗാലറിയിൽ കാണിക്കാൻ
-            updateGallery(firstColorRadio.value);
-            
-            // സ്റ്റോക്ക് അപ്ഡേറ്റ് ചെയ്യാൻ
-            checkStockAndImage();
-        }
         });
     </script>
 </body>

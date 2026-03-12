@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ current_gender }} Collection | WEST COAST FASHION CLUB</title>
+    <title>{% if keyword %}Search Results{% else %}{{ current_gender|default:"Our" }} Collection{% endif %} | WEST COAST</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,12 +17,26 @@
         body { font-family: 'Montserrat', sans-serif; color: var(--text-main); background-color: var(--bg-main); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
         h1, h2, h3, .brand-font { font-family: 'Cinzel', serif; letter-spacing: 2px; }
 
-        /* Premium Navbar (Same as Home) */
+        /* Premium Navbar */
         .navbar { background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid var(--border-color); z-index: 1000; }
         .navbar-brand { font-size: 1.8rem; letter-spacing: 6px; color: var(--text-main) !important; font-weight: 500; transition: 0.4s; }
         .nav-icon { color: var(--text-main); font-size: 1.2rem; transition: 0.3s; text-decoration: none; cursor: pointer; }
         .nav-icon:hover { color: var(--accent-color); transform: translateY(-2px); }
-        .dropdown-item:hover { color: var(--accent-color) !important; background: transparent; padding-left: 30px !important; }
+        .cart-badge { position: absolute; top: -5px; right: -8px; background: var(--accent-color); color: #000; font-size: 0.6rem; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
+
+        /* 🌟 Premium Transparent Glass Menu 🌟 */
+        .dropdown-menu {
+            background: rgba(10, 10, 10, 0.6) !important; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.3) !important; border-left: 3px solid var(--accent-color) !important;
+            border-radius: 8px !important; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); min-width: 250px; margin-top: 20px !important; padding: 10px 0;
+        }
+        .dropdown-item { color: #ffffff !important; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s ease; background: transparent !important; }
+        .dropdown-item:hover { color: var(--accent-color) !important; background: rgba(255, 255, 255, 0.05) !important; padding-left: 32px !important; }
+
+        /* 🌟 Search Bar in Menu 🌟 */
+        .menu-search { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 20px; color: var(--text-main); padding: 8px 15px; width: 100%; font-size: 0.8rem; transition: 0.3s; }
+        .menu-search:focus { outline: none; border-color: var(--accent-color); background: rgba(255,255,255,0.1); }
+        .menu-search::placeholder { color: var(--text-muted); }
 
         /* Store Header Section */
         .store-header { padding: 150px 0 50px; text-align: center; background: linear-gradient(to bottom, #111 0%, var(--bg-main) 100%); border-bottom: 1px solid var(--border-color); }
@@ -35,7 +49,7 @@
         .filter-list a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; padding-bottom: 5px; border-bottom: 2px solid transparent; }
         .filter-list a:hover, .filter-list a.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
 
-        /* Premium Product Grid (Same as Home) */
+        /* Premium Product Grid */
         .collection-section { padding: 60px 0; }
         .product-card { display: block; text-decoration: none; color: var(--text-main); margin-bottom: 50px; position: relative; cursor: pointer; }
         .img-container { overflow: hidden; aspect-ratio: 4 / 5; position: relative; border: 1px solid transparent; transition: 0.5s ease; background-color: var(--bg-secondary); }
@@ -74,7 +88,7 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
 
         @media (max-width: 768px) {
-            .store-title { font-size: 2rem; letter-spacing: 4px; }
+            .store-title { font-size: 1.8rem; letter-spacing: 4px; }
             .filter-list { gap: 15px; }
             .filter-list a { font-size: 0.7rem; }
             .img-container { aspect-ratio: 1 / 1.2; }
@@ -96,13 +110,25 @@
                 <a href="#" class="nav-icon" id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="menuDropdown" style="background-color: #121212; border: 1px solid var(--accent-color); margin-top: 25px; border-radius: 0; min-width: 200px;">
-                    <li><a class="dropdown-item" href="{% url 'home' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">HOME</a></li>
-                    <li><hr class="dropdown-divider" style="border-color: #333; margin: 0;"></li>
-                    <li><a class="dropdown-item" href="{% url 'store_by_gender' 'men' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">SHOP MEN</a></li>
-                    <li><a class="dropdown-item" href="{% url 'store_by_gender' 'women' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">SHOP WOMEN</a></li>
-                    <li><hr class="dropdown-divider" style="border-color: #333; margin: 0;"></li>
-                    <li><a class="dropdown-item" href="{% url 'my_orders' %}" style="color: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s;">MY ORDERS</a></li>
+                
+                <ul class="dropdown-menu" aria-labelledby="menuDropdown">
+                    <li class="px-3 py-2 mb-2">
+                        <form action="{% url 'store' %}" method="GET" class="position-relative">
+                            <input type="text" name="keyword" class="menu-search" placeholder="Search products...">
+                            <button type="submit" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--accent-color);"><i class="fas fa-search"></i></button>
+                        </form>
+                    </li>
+                    <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.1); margin: 0;"></li>
+                    <li><a class="dropdown-item" href="{% url 'home' %}"><i class="fas fa-home me-3" style="width: 15px; text-align: center;"></i> HOME</a></li>
+                    <li><a class="dropdown-item" href="{% url 'store_by_gender' 'men' %}"><i class="fas fa-male me-3" style="width: 15px; text-align: center;"></i> SHOP MEN</a></li>
+                    <li><a class="dropdown-item" href="{% url 'store_by_gender' 'women' %}"><i class="fas fa-female me-3" style="width: 15px; text-align: center;"></i> SHOP WOMEN</a></li>
+                    <li><a class="dropdown-item" href="{% url 'my_orders' %}"><i class="fas fa-box-open me-3" style="width: 15px; text-align: center;"></i> MY ORDERS</a></li>
+                    <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.1); margin: 0;"></li>
+                    {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'logout' %}" style="color: #ff6b6b !important;"><i class="fas fa-sign-out-alt me-3" style="width: 15px; text-align: center;"></i> LOGOUT</a></li>
+                    {% else %}
+                        <li><a class="dropdown-item" href="{% url 'login' %}" style="color: var(--accent-color) !important;"><i class="fas fa-user me-3" style="width: 15px; text-align: center;"></i> LOGIN / REGISTER</a></li>
+                    {% endif %}
                 </ul>
             </div>
 
@@ -113,29 +139,36 @@
 
             <a href="{% url 'cart' %}" class="nav-icon position-relative">
                 <i class="fas fa-shopping-bag"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" style="background: var(--accent-color); color: #000; font-size: 0.55rem; font-family: 'Montserrat', sans-serif;">{{ cart_count|default:"0" }}</span>
+                <span class="cart-badge">{{ cart_count|default:"0" }}</span>
             </a>
         </div>
     </nav>
 
     <header class="store-header">
         <div class="container">
-            <h1 class="store-title brand-font">{{ current_gender|default:"Our" }} Collection</h1>
-            <p class="store-subtitle">{{ product_count }} Exclusive Pieces Available</p>
+            {% if keyword %}
+                <h1 class="store-title brand-font" style="font-size: 2.2rem;">Search Results</h1>
+                <p class="store-subtitle">Showing results for "<span style="color: #fff;">{{ keyword }}</span>" - {{ product_count }} Items</p>
+            {% else %}
+                <h1 class="store-title brand-font">{{ current_gender|default:"Our" }} Collection</h1>
+                <p class="store-subtitle">{{ product_count }} Exclusive Pieces Available</p>
+            {% endif %}
         </div>
     </header>
 
+    {% if not keyword %}
     <div class="filter-bar">
         <div class="container">
             <ul class="filter-list">
                 <li><a href="{% if current_gender %}{% url 'store_by_gender' current_gender|lower %}{% else %}{% url 'home' %}{% endif %}" class="active">ALL</a></li>
-                <li><a href="{% url 'store_by_gender_category' current_gender|lower 'shirts' %}">SHIRTS</a></li>
-                <li><a href="{% url 'store_by_gender_category' current_gender|lower 't-shirts' %}">T-SHIRTS</a></li>
-                <li><a href="{% url 'store_by_gender_category' current_gender|lower 'shoes' %}">FOOTWEAR</a></li>
-                <li><a href="{% url 'store_by_gender_category' current_gender|lower 'watches' %}">WATCHES</a></li>
+                <li><a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' 'shirts' %}">SHIRTS</a></li>
+                <li><a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' 't-shirts' %}">T-SHIRTS</a></li>
+                <li><a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' 'shoes' %}">FOOTWEAR</a></li>
+                <li><a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' 'watches' %}">WATCHES</a></li>
             </ul>
         </div>
     </div>
+    {% endif %}
 
     <section class="collection-section container">
         <div class="row g-3 g-md-4"> 
@@ -173,11 +206,19 @@
                 </a>
             </div>
             {% empty %}
+            
             <div class="col-12 empty-state reveal">
-                <i class="fas fa-box-open empty-icon"></i>
-                <h3 class="brand-font" style="color: var(--text-main); font-size: 1.5rem; letter-spacing: 2px;">No Pieces Found</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">We are preparing new exclusive drops for this category.</p>
-                <a href="{% url 'home' %}" class="btn-gold">Return to Home</a>
+                {% if keyword %}
+                    <i class="fas fa-search empty-icon"></i>
+                    <h3 class="brand-font" style="color: var(--text-main); font-size: 1.5rem; letter-spacing: 2px;">No Results Found</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">We couldn't find anything matching "{{ keyword }}".</p>
+                    <a href="{% url 'store' %}" class="btn-gold">Clear Search</a>
+                {% else %}
+                    <i class="fas fa-box-open empty-icon"></i>
+                    <h3 class="brand-font" style="color: var(--text-main); font-size: 1.5rem; letter-spacing: 2px;">No Pieces Found</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">We are preparing new exclusive drops for this category.</p>
+                    <a href="{% url 'home' %}" class="btn-gold">Return to Home</a>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
@@ -200,7 +241,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Scroll reveal logic
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
@@ -213,7 +253,7 @@
             }
         }
         window.addEventListener("scroll", reveal);
-        reveal(); // Trigger on load
+        reveal();
     </script>
 </body>
 </html>

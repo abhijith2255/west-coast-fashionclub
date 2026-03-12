@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products | Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root { --bg-dark: #0a0a0a; --card-dark: #151515; --accent-gold: #d4af37; --text-main: #ffffff; --text-muted: #999999; --border: #333333; }
+        body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+        
+        /* 🌟 Sidebar 🌟 */
+        .sidebar { width: 260px; height: 100vh; background: var(--card-dark); position: fixed; left: 0; top: 0; border-right: 1px solid var(--border); padding: 20px; z-index: 1000; transition: 0.3s; }
+        .brand-name { font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); text-align: center; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px; }
+        .nav-menu { list-style: none; padding: 0; }
+        .nav-link { color: var(--text-muted); text-decoration: none; padding: 12px 15px; border-radius: 8px; display: flex; align-items: center; transition: 0.3s; font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-link i { margin-right: 15px; width: 20px; text-align: center; font-size: 1.1rem; }
+        .nav-link:hover, .nav-link.active { background: rgba(212, 175, 55, 0.1); color: var(--accent-gold); }
+
+        /* 🌟 Main Content 🌟 */
+        .main-content { margin-left: 260px; padding: 40px; transition: 0.3s; }
+        
+        .btn-add-new { background: var(--accent-gold); color: #000; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: 0.3s; white-space: nowrap; }
+        .btn-add-new:hover { background: #fff; color: #000; }
+
+        /* 🌟 Responsive Table Design 🌟 */
+        .table-container { background: var(--card-dark); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-top: 20px; }
+        .custom-table { width: 100%; color: var(--text-main); border-collapse: collapse; }
+        .custom-table th { border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 500; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; padding: 15px 10px; text-align: left; }
+        .custom-table td { border-bottom: 1px solid var(--border); padding: 15px 10px; vertical-align: middle; font-size: 0.9rem; }
+        .custom-table tbody tr:hover { background-color: rgba(255,255,255,0.02); }
+        .custom-table tbody tr:last-child td { border-bottom: none; }
+
+        .prod-img { width: 50px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+        .badge-status { padding: 5px 10px; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .badge-active { background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid #28a745; }
+        .badge-inactive { background: rgba(255, 107, 107, 0.1); color: #ff6b6b; border: 1px solid #ff6b6b; }
+        
+        .action-btn { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; border-radius: 4px; font-size: 0.85rem; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; margin-right: 5px; }
+        .action-btn.edit:hover { border-color: #64b5f6; color: #64b5f6; background: rgba(100, 181, 246, 0.1); }
+        .action-btn.delete:hover { border-color: #ff6b6b; color: #ff6b6b; background: rgba(255, 107, 107, 0.1); }
+
+        /* 🌟 MOBILE OPTIMIZATION (Card View) 🌟 */
+        @media (max-width: 991px) {
+            .sidebar { width: 70px; padding: 20px 5px; }
+            .sidebar .brand-name, .sidebar .nav-link span { display: none; }
+            .main-content { margin-left: 70px; padding: 25px 15px; }
+        }
+
+        @media (max-width: 768px) {
+            .table-container { padding: 15px 10px; background: transparent; border: none; margin-top: 10px; }
+            .custom-table thead { display: none; /* Hide headers on mobile */ }
+            
+            /* Turn Rows into Cards */
+            .custom-table tbody tr { 
+                display: flex; flex-direction: column; 
+                background: var(--card-dark); border: 1px solid var(--border); 
+                border-radius: 12px; margin-bottom: 20px; padding: 15px; 
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+            
+            /* Styling columns like list items */
+            .custom-table tbody td { 
+                border: none; padding: 10px 0; 
+                display: flex; justify-content: space-between; align-items: center; 
+                border-bottom: 1px solid rgba(255,255,255,0.05); 
+                text-align: right;
+            }
+            
+            /* Adding Labels before the content using data-label attribute */
+            .custom-table tbody td::before { 
+                content: attr(data-label); 
+                color: var(--text-muted); 
+                font-size: 0.75rem; 
+                text-transform: uppercase; 
+                letter-spacing: 1px; 
+                font-weight: 600; 
+                margin-right: 15px;
+            }
+            
+            /* Image styling for mobile */
+            .custom-table tbody td.td-img { 
+                display: block; padding: 0 0 15px 0; text-align: center; border-bottom: none;
+            }
+            .custom-table tbody td.td-img::before { display: none; }
+            .prod-img { width: 100px; height: 120px; border-radius: 8px; margin: 0 auto; }
+            
+            /* Actions styling for mobile */
+            .custom-table tbody td.td-actions { 
+                border-bottom: none; justify-content: space-between; margin-top: 10px; padding-bottom: 0;
+            }
+            .custom-table tbody td.td-actions::before { display: none; }
+            .action-btn { flex: 1; margin: 0 5px; padding: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: 0.75rem; }
+            .action-btn:first-child { margin-left: 0; }
+            .action-btn:last-child { margin-right: 0; }
+            
+            .header-wrap { flex-direction: column; align-items: flex-start !important; gap: 15px; }
+            .btn-add-new { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand-name">WC</div>
+        <ul class="nav-menu">
+            <li><a href="{% url 'admin_dashboard' %}" class="nav-link"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+            <li><a href="{% url 'order_list' %}" class="nav-link"><i class="fas fa-shopping-bag"></i> <span>Orders</span></a></li>
+            <li><a href="{% url 'product_list' %}" class="nav-link active"><i class="fas fa-box-open"></i> <span>Products</span></a></li>
+            <li><a href="{% url 'add_product' %}" class="nav-link"><i class="fas fa-plus-circle"></i> <span>Add Product</span></a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4 header-wrap">
+            <h3 class="fw-bold m-0" style="color: var(--accent-gold);">Manage Products</h3>
+            <a href="{% url 'add_product' %}" class="btn-add-new"><i class="fas fa-plus me-2"></i> Add Product</a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success bg-dark text-success border-success" style="font-size: 0.9rem;">
+                    <i class="fas fa-check-circle me-2"></i>{{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="table-container">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td class="td-img" data-label="Image">
+                            {% if product.main_image %}
+                                <img src="{{ product.main_image.url }}" class="prod-img" alt="img">
+                            {% else %}
+                                <div class="prod-img d-flex align-items-center justify-content-center" style="background: #222; margin: auto;">
+                                    <i class="fas fa-image text-muted"></i>
+                                </div>
+                            {% endif %}
+                        </td>
+                        
+                        <td data-label="Product Name" style="font-weight: 500;">{{ product.name }}</td>
+                        
+                        <td data-label="Category" style="color: var(--text-muted);">{{ product.category.name }}</td>
+                        
+                        <td data-label="Price" style="color: var(--accent-gold); font-weight: 600;">₹{{ product.price }}</td>
+                        
+                        <td data-label="Status">
+                            {% if product.is_active %}
+                                <span class="badge-status badge-active">Active</span>
+                            {% else %}
+                                <span class="badge-status badge-inactive">Inactive</span>
+                            {% endif %}
+                        </td>
+                        
+                        <td class="td-actions text-end" data-label="Actions">
+                            <a href="{% url 'edit_product' product.id %}" class="action-btn edit" title="Edit">
+                                <i class="fas fa-pen me-1"></i> Edit
+                            </a>
+                            <a href="{% url 'delete_product' product.id %}" class="action-btn delete" title="Delete" onclick="return confirm('Are you sure you want to delete {{ product.name }}? This action cannot be undone.');">
+                                <i class="fas fa-trash-alt me-1"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5" style="border: none;">
+                            <i class="fas fa-box-open fs-1 mb-3 text-secondary"></i>
+                            <p>No products found. <br><a href="{% url 'add_product' %}" style="color: var(--accent-gold);">Add your first product</a></p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

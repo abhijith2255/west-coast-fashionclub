@@ -1,6 +1,9 @@
 import json
+from django.db.models import Avg, Q  # 🌟 Q കൂടി ചേർത്തു 🌟
 import razorpay
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db.models import Avg
 from django.conf import settings
 from .models import Color, Product, Cart, CartItem, Order, OrderItem, ReviewRating, Category, ProductVariant, ProductGallery, Size
@@ -11,60 +14,50 @@ def home(request):
     context = {'products': trending_products}
     return render(request, 'home.html', context)
 
-# 2. Product Detail Page
-# 2. Product Detail Page
-# 2. Product Detail Page
-# 2. Product Detail Page
 def product_detail(request, slug):
-    try:
-        product = Product.objects.get(slug=slug)
-        product_gallery = ProductGallery.objects.filter(product=product)
+    product = get_object_or_404(Product, slug=slug, is_active=True)
+    
+    # പ്രൊഡക്റ്റിന്റെ എല്ലാ വേരിയന്റുകളും എടുക്കുന്നു
+    variants = ProductVariant.objects.filter(product=product, is_active=True)
+    
+    # 1. സൈസുകൾ മാത്രം എടുക്കാൻ
+    sizes = variants.values_list('size__name', flat=True).distinct()
+    
+    # 2. കളറുകളും ഫോട്ടോകളും സ്റ്റോക്കും ജാവാസ്ക്രിപ്റ്റിന് (JS) മനസ്സിലാകുന്ന രീതിയിൽ മാറ്റുന്നു
+    color_data = []
+    color_images = {}
+    color_gallery = {}
+    variant_data = {}
+    added_colors = set()
+    
+    for v in variants:
+        c_name = v.color.name
         
-        variants = ProductVariant.objects.filter(product=product, is_active=True)
-        sizes = variants.values_list('size__name', flat=True).distinct()
+        # JS-നുള്ള സ്റ്റോക്ക് ഡാറ്റ (ഉദാഹരണത്തിന്: "Black_XL": 15)
+        stock_key = f"{c_name}_{v.size.name}"
+        variant_data[stock_key] = v.stock
         
-        reviews = ReviewRating.objects.filter(product=product, status=True)
-        review_count = reviews.count()
-        average_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0.0
-        
-        variant_data = {}
-        color_images = {}
-        color_data = []
-        added_colors = set()
-
-        for v in variants:
-            key = f"{v.color.name}_{v.size.name}"
-            variant_data[key] = v.stock
+        if c_name not in added_colors:
+            img_url = v.image.url if v.image else product.main_image.url
             
-            img_url = v.image.url if hasattr(v, 'image') and v.image else product.main_image.url
-            color_images[v.color.name] = img_url
-
-            if v.color.name not in added_colors:
-                color_data.append({'name': v.color.name, 'url': img_url})
-                added_colors.add(v.color.name)
-
-        # 🌟 ഗാലറി ഫോട്ടോകളെ കളർ തിരിച്ച് ഗ്രൂപ്പ് ചെയ്യാനുള്ള പുതിയ കോഡ് 🌟
-        color_gallery_data = {}
-        for img in product_gallery:
-            if img.color: # ഫോട്ടോയ്ക്ക് കളർ കൊടുത്തിട്ടുണ്ടെങ്കിൽ
-                c_name = img.color.name
-                if c_name not in color_gallery_data:
-                    color_gallery_data[c_name] = []
-                color_gallery_data[c_name].append(img.image.url)
+            color_data.append({'name': c_name, 'url': img_url})
+            color_images[c_name] = img_url
             
-    except Exception as e:
-        raise e
+            # ആ കളറിനുള്ള ഗാലറി ഫോട്ടോകൾ എടുക്കുന്നു
+            gallery_objs = ProductGallery.objects.filter(product=product, color=v.color)
+            color_gallery[c_name] = [g.image.url for g in gallery_objs]
+            
+            added_colors.add(c_name)
 
     context = {
         'product': product,
-        'product_gallery': product_gallery,
         'sizes': sizes,
         'color_data': color_data,
-        'variant_data': json.dumps(variant_data),
-        'color_images': json.dumps(color_images),
-        'color_gallery': json.dumps(color_gallery_data), # 🌟 പുതിയ ഡാറ്റ 🌟
-        'review_count': review_count,
-        'average_rating': average_rating,
+        'variant_data': json.dumps(variant_data),   # JS-ലേക്ക് പാസ് ചെയ്യുന്നു
+        'color_images': json.dumps(color_images),   # JS-ലേക്ക് പാസ് ചെയ്യുന്നു
+        'color_gallery': json.dumps(color_gallery), # JS-ലേക്ക് പാസ് ചെയ്യുന്നു
+        'review_count': product.get_review_count(),
+        'average_rating': product.get_avg_rating(),
     }
     return render(request, 'product_detail.html', context)
 
@@ -292,18 +285,90 @@ def my_orders(request):
     context = {'orders': orders}
     return render(request, 'my_order.html', context)
 
-# 12. Store Page
+# 12. Store Page & Search Function
 def store(request, gender=None, category_slug=None):
     products = Product.objects.filter(is_active=True)
+    
+    # 1. Gender / Category ഫിൽറ്ററുകൾ (നിങ്ങളുടെ പഴയ കോഡ്)
     if gender:
         products = products.filter(gender=gender.capitalize())
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = products.filter(category=category)
 
+    # 2. 🌟 പുതിയ Search ലോജിക് 🌟
+    keyword = request.GET.get('keyword')
+    if keyword:
+        # പ്രൊഡക്റ്റിന്റെ പേരിലോ ഡിസ്ക്രിപ്ഷനിലോ ആ വാക്കുണ്ടോ എന്ന് നോക്കുന്നു
+        products = products.filter(Q(description__icontains=keyword) | Q(name__icontains=keyword))
+
     context = {
         'products': products,
         'product_count': products.count(),
         'current_gender': gender,
+        'keyword': keyword, # ഈ വേരിയബിൾ HTML-ലേക്ക് അയക്കുന്നു
     }
     return render(request, 'store.html', context)
+
+def login_view(request):
+    # കസ്റ്റമറോ അഡ്മിനോ നേരത്തെ ലോഗിൻ ചെയ്തിട്ടുണ്ടെങ്കിൽ
+    if request.user.is_authenticated:
+        if request.user.is_staff or request.user.is_superuser:
+            return redirect('admin_dashboard') # അഡ്മിൻ ആണെങ്കിൽ ഡാഷ്ബോർഡിലേക്ക്
+        return redirect('home') # സാധാരണ കസ്റ്റമർ ആണെങ്കിൽ ഹോം പേജിലേക്ക്
+        
+    if request.method == 'POST':
+        u_name = request.POST.get('username')
+        p_word = request.POST.get('password')
+        
+        user = authenticate(request, username=u_name, password=p_word)
+        
+        if user is not None:
+            login(request, user)
+            
+            # 🌟 ഇവിടെയാണ് നമ്മൾ റൂട്ട് തിരിച്ചുവിടുന്നത് 🌟
+            if user.is_staff or user.is_superuser:
+                return redirect('admin_dashboard') # അഡ്മിൻ ലോഗിൻ ആയാൽ നേരെ ഡാഷ്ബോർഡ്!
+            else:
+                return redirect('home') # കസ്റ്റമർ ആയാൽ നേരെ ഷോപ്പിലേക്ക്!
+                
+        else:
+            messages.error(request, 'Invalid username or password. Please try again.')
+            
+    return render(request, 'login.html')
+
+# --- Logout View ---
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+from django.contrib.auth.models import User
+
+# --- Register View ---
+def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if password == confirm_password:
+            # പാസ്‌വേഡുകൾ ശരിയാണെങ്കിൽ യൂസറെ ഉണ്ടാക്കുന്നു
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Username already taken.')
+            elif User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already registered.')
+            else:
+                user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+                user.save()
+                messages.success(request, 'Account created successfully! Please login.')
+                return redirect('login') # ഉണ്ടാക്കിക്കഴിഞ്ഞാൽ ലോഗിനിലേക്ക് തിരിച്ചുവിടും
+        else:
+            messages.error(request, 'Passwords do not match.')
+
+    return render(request, 'login.html') # ഒരേ HTML ഫയൽ തന്നെ ഉപയോഗിക്കുന്നു

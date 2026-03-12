@@ -23,4 +23,7 @@ urlpatterns = [
     # Men-ൽ തന്നെ Shirts അല്ലെങ്കിൽ Shoes മാത്രം കാണിക്കാൻ
     path('store/<str:gender>/<slug:category_slug>/', views.store, name='store_by_gender_category'),
     path('store/', views.store, name='store'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('register/', views.register_view, name='register')
 ]

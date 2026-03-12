@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('products.urls')),
+    path('admin-panel/', include('adminapp.urls')),
 ]
 
 # ഈ ഭാഗം കൃത്യമായി ഉണ്ടെന്ന് ഉറപ്പാക്കുക
