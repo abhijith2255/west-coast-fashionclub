@@ -2,19 +2,29 @@ from django.db import models
 from django.urls import reverse
 from django.db.models import Avg
 
-# 1. Category Model
+# നമ്മൾ ഉപയോഗിക്കുന്ന Gender Choices മുകളിൽ തന്നെ കൊടുക്കാം
+GENDER_CHOICES = (
+    ('Men', 'Men'),
+    ('Women', 'Women'),
+    ('Unisex', 'Unisex'),
+)
+
+# 1. Category Model (🌟 ഇവിടെ gender ആഡ് ചെയ്തു 🌟)
 class Category(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50) # unique=True മാറ്റി, കാരണം ഒരേ പേരിൽ Men നും Women നും കാറ്റഗറി വരാം
     slug = models.SlugField(max_length=100, unique=True)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, default='Men')
 
     class Meta:
         verbose_name = 'category'
         verbose_name_plural = 'categories'
+        # ഒരേ ജെൻഡറിൽ ഒരേ പേര് വരാതിരിക്കാൻ
+        unique_together = ('name', 'gender')
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.gender})"
 
-# 2. Size & Color Models (പുതിയ സൈസുകൾ ആഡ് ചെയ്യാൻ ഇത് സഹായിക്കും)
+# 2. Size & Color Models
 class Size(models.Model):
     name = models.CharField(max_length=20, unique=True) # ഉദാ: S, M, L, XL, XXL
     def __str__(self):
@@ -27,12 +37,6 @@ class Color(models.Model):
         return self.name
 
 # 3. Product Model
-GENDER_CHOICES = (
-    ('Men', 'Men'),
-    ('Women', 'Women'),
-    ('Unisex', 'Unisex'),
-)
-
 class Product(models.Model):
     name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=250, unique=True)
@@ -43,7 +47,6 @@ class Product(models.Model):
     price = models.IntegerField()
     discount_price = models.IntegerField(blank=True, null=True)
     
-    # ഇത് പ്രൊഡക്റ്റിന്റെ മെയിൻ കവർ ഫോട്ടോ
     main_image = models.ImageField(upload_to='photos/products')
     
     manual_review_count = models.IntegerField(default=0)
@@ -69,12 +72,11 @@ class Product(models.Model):
         avg = self.reviews.filter(status=True).aggregate(Avg('rating'))['rating__avg']
         return round(avg, 1) if avg is not None else 0.0
 
-# 4. Product Variant Model (ഇവിടെയാണ് ഓരോ കളറിനും സൈസിനുമുള്ള സ്റ്റോക്ക് വരുന്നത്)
+# 4. Product Variant Model (🌟 duplicate color field മാറ്റി 🌟)
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants')
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='store/variant_images/', blank=True, null=True)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to='store/variant_images/', blank=True, null=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE)
     stock = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
@@ -83,9 +85,10 @@ class ProductVariant(models.Model):
         unique_together = ('product', 'color', 'size')
 
     def __str__(self):
-        return f"{self.product.name} - {self.color.name} - {self.size.name}"
+        color_name = self.color.name if self.color else "No Color"
+        return f"{self.product.name} - {color_name} - {self.size.name}"
 
-# 5. Product Gallery (ഇവിടെ ഫോട്ടോകൾക്ക് കളർ കൊടുക്കാം!)
+# 5. Product Gallery
 class ProductGallery(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='gallery_images')
     color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True, help_text="ഈ ഫോട്ടോ ഏത് കളർ ഷർട്ടിന്റേതാണെന്ന് സെലക്ട് ചെയ്യുക")

@@ -31,14 +31,15 @@
         .grid-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border: 1px solid var(--border-color); border-radius: 4px; transition: 0.3s ease-in-out; }
 
         .product-title { font-size: 1.8rem; text-transform: uppercase; font-weight: 500; margin-bottom: 5px; }
-        .product-price-box { display: flex; align-items: baseline; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        .product-price-box { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
         .current-price { font-size: 1.8rem; color: var(--accent-color); font-family: 'Cinzel', serif; font-weight: 600; }
         .original-price { font-size: 1rem; color: var(--text-muted); text-decoration: line-through; }
 
-       /* 🌟 Premium Description Block 🌟 */
+        /* 🌟 Premium Description Block 🌟 */
         .premium-desc-block { margin-bottom: 30px; padding: 15px 20px; background: rgba(212, 175, 55, 0.03); border-left: 3px solid var(--accent-color); border-radius: 0 6px 6px 0; }
         .desc-label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-bottom: 8px; font-weight: 600; }
         .desc-text { color: #dddddd; font-size: 0.95rem; line-height: 1.7; margin: 0; font-weight: 400; white-space: pre-line; text-transform: capitalize; }
+
         /* Info Boxes */
         .info-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; margin-bottom: 25px; }
         .box-title { font-size: 1rem; font-weight: 600; margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); }
@@ -60,13 +61,19 @@
         .size-selector label { display: inline-block; padding: 8px 15px; border: 1px solid var(--border-color); margin: 0 5px 10px 0; cursor: pointer; transition: 0.3s; font-size: 0.85rem; border-radius: 4px; font-weight: 500; }
         .size-selector input:checked + label { border-color: var(--accent-color); background: var(--accent-color); color: #000; font-weight: 600; }
 
+        /* 🌟 Flipkart Style Color Thumbnails CSS 🌟 */
         .color-thumbnail-selector { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
         .color-thumbnail-selector input { display: none; }
-        .color-thumbnail-selector label { width: 65px; height: 85px; border: 2px solid var(--border-color); cursor: pointer; transition: 0.3s; padding: 3px; border-radius: 4px; background: var(--bg-card); }
+        .color-thumbnail-selector label { 
+            width: 65px; height: 85px; 
+            border: 2px solid var(--border-color); 
+            cursor: pointer; transition: 0.3s; 
+            padding: 3px; border-radius: 4px; background: var(--bg-card);
+        }
         .color-thumbnail-selector label img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
         .color-thumbnail-selector input:checked + label { border-color: var(--accent-color); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
 
-        /* Alerts */
+        /* Error & Warning */
         #selection-error { display: none; color: #ff6b6b; font-size: 0.85rem; margin-bottom: 15px; font-weight: 500; border-left: 2px solid #ff6b6b; padding-left: 10px; background: rgba(255, 107, 107, 0.05); padding: 10px; }
         #dynamic-stock-warning { display: none; font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; padding: 12px; border-radius: 4px; }
 
@@ -83,7 +90,7 @@
             .btn-cart-outline, .btn-buy-solid { padding: 15px 10px; font-size: 0.8rem; letter-spacing: 1px; } 
         }
 
-        /* 🌟 Premium Footer CSS 🌟 */
+        /* Premium Footer */
         .premium-footer { background: var(--bg-card); border-top: 1px solid var(--border-color); padding: 80px 0 30px 0; margin-top: 60px; }
         .footer-heading { font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 30px; letter-spacing: 3px; color: var(--text-main); text-transform: uppercase; }
         .footer-links { list-style: none; padding: 0; margin: 0; }
@@ -100,7 +107,7 @@
     <nav class="navbar fixed-top premium-nav">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-3 w-25">
-                <a href="#" class="nav-icon d-lg-none"><i class="fas fa-bars"></i></a>
+                <a href="javascript:history.back()" class="nav-icon d-lg-none"><i class="fas fa-arrow-left"></i></a>
                 <a href="#" class="nav-icon d-none d-lg-block"><i class="fas fa-search"></i></a>
                 <div class="d-none d-lg-flex gap-4 ms-3 nav-links-desktop"><a href="{% url 'store' %}">Shop</a></div>
             </div>
@@ -206,14 +213,6 @@
                     </div>
                 </form> 
 
-                <div class="info-box">
-                    <span class="box-title">Product Highlights</span>
-                    <div class="highlights-grid">
-                        <div class="highlight-item"><span class="highlight-label">Category</span><span class="highlight-value">{{ product.category.name }}</span></div>
-                        <div class="highlight-item"><span class="highlight-label">Gender</span><span class="highlight-value">{{ product.gender }}</span></div>
-                    </div>
-                </div>
-
                 <div class="info-box mt-4">
                     <span class="box-title">Delivery Details</span>
                     <div class="delivery-location"><i class="fas fa-map-marker-alt"></i> Location not set <span style="text-decoration: underline; font-size: 0.75rem; margin-left: 5px;">Select delivery location</span></div>
@@ -225,6 +224,14 @@
                         <div class="trust-item"><i class="fas fa-undo"></i> 10-Day<br>Return</div>
                         <div class="trust-item"><i class="fas fa-rupee-sign"></i> Cash on<br>Delivery</div>
                         <div class="trust-item"><i class="fas fa-shield-alt"></i> WEST COAST<br>Assured</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <span class="box-title">Product Highlights</span>
+                    <div class="highlights-grid">
+                        <div class="highlight-item"><span class="highlight-label">Category</span><span class="highlight-value">{{ product.category.name }}</span></div>
+                        <div class="highlight-item"><span class="highlight-label">Gender</span><span class="highlight-value">{{ product.gender }}</span></div>
                     </div>
                 </div>
 

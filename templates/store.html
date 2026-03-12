@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if keyword %}Search Results{% else %}{{ current_gender|default:"Our" }} Collection{% endif %} | WEST COAST</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -18,62 +19,69 @@
         h1, h2, h3, .brand-font { font-family: 'Cinzel', serif; letter-spacing: 2px; }
 
         /* Premium Navbar */
-        .navbar { background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid var(--border-color); z-index: 1000; }
+        .navbar { background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid var(--border-color); z-index: 1000; transition: 0.3s; }
         .navbar-brand { font-size: 1.8rem; letter-spacing: 6px; color: var(--text-main) !important; font-weight: 500; transition: 0.4s; }
         .nav-icon { color: var(--text-main); font-size: 1.2rem; transition: 0.3s; text-decoration: none; cursor: pointer; }
         .nav-icon:hover { color: var(--accent-color); transform: translateY(-2px); }
         .cart-badge { position: absolute; top: -5px; right: -8px; background: var(--accent-color); color: #000; font-size: 0.6rem; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
 
-        /* 🌟 Premium Transparent Glass Menu 🌟 */
-        .dropdown-menu {
-            background: rgba(10, 10, 10, 0.6) !important; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 175, 55, 0.3) !important; border-left: 3px solid var(--accent-color) !important;
-            border-radius: 8px !important; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); min-width: 250px; margin-top: 20px !important; padding: 10px 0;
-        }
+        /* Premium Transparent Glass Menu */
+        .dropdown-menu { background: rgba(10, 10, 10, 0.6) !important; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.3) !important; border-left: 3px solid var(--accent-color) !important; border-radius: 8px !important; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); min-width: 250px; margin-top: 20px !important; padding: 10px 0; }
         .dropdown-item { color: #ffffff !important; font-size: 0.85rem; letter-spacing: 2px; padding: 15px 25px; transition: 0.3s ease; background: transparent !important; }
         .dropdown-item:hover { color: var(--accent-color) !important; background: rgba(255, 255, 255, 0.05) !important; padding-left: 32px !important; }
-
-        /* 🌟 Search Bar in Menu 🌟 */
+        
         .menu-search { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 20px; color: var(--text-main); padding: 8px 15px; width: 100%; font-size: 0.8rem; transition: 0.3s; }
         .menu-search:focus { outline: none; border-color: var(--accent-color); background: rgba(255,255,255,0.1); }
         .menu-search::placeholder { color: var(--text-muted); }
 
         /* Store Header Section */
-        .store-header { padding: 150px 0 50px; text-align: center; background: linear-gradient(to bottom, #111 0%, var(--bg-main) 100%); border-bottom: 1px solid var(--border-color); }
-        .store-title { font-size: 3rem; text-transform: uppercase; letter-spacing: 8px; margin-bottom: 15px; color: var(--accent-color); animation: fadeUp 1s ease; }
-        .store-subtitle { color: var(--text-muted); font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; }
+        .store-header { height: 40vh; min-height: 300px; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; background: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; background-attachment: fixed; margin-top: 60px; }
+        .store-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, var(--bg-main) 100%); }
+        .header-content { position: relative; z-index: 2; padding-top: 40px; }
+        .store-title { font-size: 3.5rem; text-transform: uppercase; letter-spacing: 12px; margin-bottom: 10px; color: var(--text-main); animation: fadeUp 1s ease; text-shadow: 2px 2px 20px rgba(0,0,0,0.8); }
+        .store-subtitle { color: var(--accent-color); font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 500; }
 
-        /* Horizontal Filter Bar */
-        .filter-bar { padding: 20px 0; border-bottom: 1px solid var(--border-color); background-color: var(--bg-main); position: sticky; top: 70px; z-index: 900; }
-        .filter-list { list-style: none; padding: 0; margin: 0; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
-        .filter-list a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; padding-bottom: 5px; border-bottom: 2px solid transparent; }
-        .filter-list a:hover, .filter-list a.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
+        /* 🌟 NEW: Premium Gender Toggle System 🌟 */
+        .gender-toggle-wrapper { background: var(--bg-main); padding: 40px 0 10px; text-align: center; }
+        .gender-toggle { display: inline-flex; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 40px; padding: 5px; }
+        .gender-btn { padding: 12px 40px; border-radius: 35px; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; transition: 0.4s; }
+        .gender-btn:hover { color: var(--text-main); }
+        .gender-btn.active { background: var(--accent-color); color: #000; font-weight: 700; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
+
+        /* Dynamic Scrollable Category Bar */
+        .category-nav-wrapper { background: var(--bg-main); border-bottom: 1px solid var(--border-color); position: sticky; top: 75px; z-index: 900; padding: 15px 0; }
+        .category-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 5px; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; justify-content: center; }
+        .category-scroll::-webkit-scrollbar { display: none; }
+        
+        .cat-btn { white-space: nowrap; padding: 8px 25px; border: 1px solid var(--border-color); border-radius: 30px; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; background: transparent; }
+        .cat-btn:hover { border-color: var(--accent-color); color: var(--text-main); }
+        .cat-btn.active { background: var(--accent-color); color: #000; border-color: var(--accent-color); font-weight: 600; }
 
         /* Premium Product Grid */
-        .collection-section { padding: 60px 0; }
+        .collection-section { padding: 60px 0; min-height: 50vh; }
         .product-card { display: block; text-decoration: none; color: var(--text-main); margin-bottom: 50px; position: relative; cursor: pointer; }
-        .img-container { overflow: hidden; aspect-ratio: 4 / 5; position: relative; border: 1px solid transparent; transition: 0.5s ease; background-color: var(--bg-secondary); }
-        .product-img { width: 100%; height: 100%; object-fit: cover; transition: 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); filter: brightness(0.85); }
-        .product-card:hover .img-container { border-color: var(--border-color); }
+        .img-container { overflow: hidden; aspect-ratio: 4 / 5; position: relative; border: 1px solid transparent; transition: 0.5s ease; background-color: var(--bg-secondary); border-radius: 4px; }
+        .product-img { width: 100%; height: 100%; object-fit: cover; transition: 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); filter: brightness(0.9); }
+        .product-card:hover .img-container { border-color: var(--accent-color); }
         .product-card:hover .product-img { transform: scale(1.08); filter: brightness(1.1); }
         
-        .quick-view { position: absolute; bottom: -50px; left: 0; width: 100%; background: rgba(10, 10, 10, 0.9); padding: 15px 0; text-align: center; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); transition: 0.4s ease; opacity: 0; }
+        .quick-view { position: absolute; bottom: -60px; left: 0; width: 100%; background: rgba(212, 175, 55, 0.95); backdrop-filter: blur(5px); padding: 15px 0; text-align: center; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; color: #000; font-weight: 600; transition: 0.4s ease; opacity: 0; }
         .product-card:hover .quick-view { bottom: 0; opacity: 1; }
         
-        .product-info { padding: 25px 0; text-align: center; }
+        .product-info { padding: 25px 0 10px; text-align: center; }
         .product-title { font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 8px; letter-spacing: 2px; color: var(--text-main); transition: 0.3s; }
         .product-card:hover .product-title { color: var(--accent-color); }
         
-        .product-rating { font-size: 0.75rem; margin-bottom: 10px; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .product-rating { font-size: 0.75rem; margin-bottom: 12px; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .star-icon { color: var(--accent-color); font-size: 0.7rem; }
         .rating-number { color: var(--text-main); font-weight: 500; }
         .review-count { color: var(--text-muted); }
 
-        .product-price { color: var(--text-muted); font-size: 0.95rem; font-family: 'Montserrat', sans-serif; }
-        .discount-price { color: var(--text-main); font-weight: 500; margin-right: 10px; }
+        .product-price { color: var(--text-muted); font-size: 1rem; font-family: 'Montserrat', sans-serif; }
+        .discount-price { color: var(--text-main); font-weight: 600; margin-right: 10px; font-size: 1.1rem; }
 
         /* Empty State */
-        .empty-state { padding: 100px 0; text-align: center; }
+        .empty-state { padding: 80px 0; text-align: center; }
         .empty-icon { font-size: 4rem; color: var(--border-color); margin-bottom: 20px; }
         .btn-gold { border: 1px solid var(--accent-color); color: var(--accent-color); background: transparent; padding: 15px 40px; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; font-size: 0.8rem; transition: 0.4s; display: inline-block; margin-top: 20px; }
         .btn-gold:hover { background: var(--accent-color); color: #000; }
@@ -87,10 +95,15 @@
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
+        /* Mobile */
         @media (max-width: 768px) {
-            .store-title { font-size: 1.8rem; letter-spacing: 4px; }
-            .filter-list { gap: 15px; }
-            .filter-list a { font-size: 0.7rem; }
+            .store-title { font-size: 2.2rem; letter-spacing: 6px; }
+            .store-subtitle { font-size: 0.75rem; letter-spacing: 2px; }
+            
+            /* Mobile tweaks for tabs */
+            .gender-btn { padding: 10px 20px; font-size: 0.75rem; }
+            .category-scroll { justify-content: flex-start; padding-left: 15px; }
+            
             .img-container { aspect-ratio: 1 / 1.2; }
             .product-card { margin-bottom: 20px; }
             .product-info { padding: 15px 5px; }
@@ -110,7 +123,6 @@
                 <a href="#" class="nav-icon" id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </a>
-                
                 <ul class="dropdown-menu" aria-labelledby="menuDropdown">
                     <li class="px-3 py-2 mb-2">
                         <form action="{% url 'store' %}" method="GET" class="position-relative">
@@ -125,6 +137,9 @@
                     <li><a class="dropdown-item" href="{% url 'my_orders' %}"><i class="fas fa-box-open me-3" style="width: 15px; text-align: center;"></i> MY ORDERS</a></li>
                     <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.1); margin: 0;"></li>
                     {% if user.is_authenticated %}
+                        {% if user.is_superadmin or user.is_staff or user.is_superuser %}
+                            <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}" style="color: var(--accent-color) !important;"><i class="fas fa-tools me-3" style="width: 15px; text-align: center;"></i> ADMIN PANEL</a></li>
+                        {% endif %}
                         <li><a class="dropdown-item" href="{% url 'logout' %}" style="color: #ff6b6b !important;"><i class="fas fa-sign-out-alt me-3" style="width: 15px; text-align: center;"></i> LOGOUT</a></li>
                     {% else %}
                         <li><a class="dropdown-item" href="{% url 'login' %}" style="color: var(--accent-color) !important;"><i class="fas fa-user me-3" style="width: 15px; text-align: center;"></i> LOGIN / REGISTER</a></li>
@@ -145,27 +160,42 @@
     </nav>
 
     <header class="store-header">
-        <div class="container">
+        <div class="store-overlay"></div>
+        <div class="header-content container">
             {% if keyword %}
-                <h1 class="store-title brand-font" style="font-size: 2.2rem;">Search Results</h1>
+                <h1 class="store-title brand-font" style="font-size: 2.5rem;">Search Results</h1>
                 <p class="store-subtitle">Showing results for "<span style="color: #fff;">{{ keyword }}</span>" - {{ product_count }} Items</p>
             {% else %}
-                <h1 class="store-title brand-font">{{ current_gender|default:"Our" }} Collection</h1>
+                <h1 class="store-title brand-font">
+                    {% if current_gender|lower == 'men' %} MEN'S
+                    {% elif current_gender|lower == 'women' %} WOMEN'S
+                    {% else %} THE {% endif %} COLLECTION
+                </h1>
                 <p class="store-subtitle">{{ product_count }} Exclusive Pieces Available</p>
             {% endif %}
         </div>
     </header>
 
     {% if not keyword %}
-    <div class="filter-bar">
+    <div class="gender-toggle-wrapper">
         <div class="container">
-            <ul class="filter-list">
-                <li><a href="{% if current_gender %}{% url 'store_by_gender' current_gender|lower %}{% else %}{% url 'home' %}{% endif %}" class="active">ALL</a></li>
-                <li><a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' 'shirts' %}">SHIRTS</a></li>
-                <li><a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' 't-shirts' %}">T-SHIRTS</a></li>
-                <li><a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' 'shoes' %}">FOOTWEAR</a></li>
-                <li><a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' 'watches' %}">WATCHES</a></li>
-            </ul>
+            <div class="gender-toggle">
+                <a href="{% url 'store' %}" class="gender-btn {% if not current_gender %}active{% endif %}">ALL</a>
+                <a href="{% url 'store_by_gender' 'men' %}" class="gender-btn {% if current_gender|lower == 'men' %}active{% endif %}">MEN</a>
+                <a href="{% url 'store_by_gender' 'women' %}" class="gender-btn {% if current_gender|lower == 'women' %}active{% endif %}">WOMEN</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-nav-wrapper shadow-sm">
+        <div class="container">
+            <div class="category-scroll">
+                <a href="{% if current_gender %}{% url 'store_by_gender' current_gender|lower %}{% else %}{% url 'store' %}{% endif %}" class="cat-btn {% if not current_category %}active{% endif %}">All Items</a>
+                
+                {% for cat in categories %}
+                    <a href="{% url 'store_by_gender_category' current_gender|lower|default:'all' cat.slug %}" class="cat-btn {% if current_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+                {% endfor %}
+            </div>
         </div>
     </div>
     {% endif %}
@@ -179,15 +209,20 @@
                         {% if product.main_image %}
                         <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="product-img">
                         {% endif %}
+                        
+                        {% if not current_gender %}
+                        <span style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--accent-color); font-size: 0.6rem; padding: 4px 8px; letter-spacing: 1px; text-transform: uppercase; z-index: 2; border: 1px solid var(--accent-color); border-radius: 2px;">{{ product.gender }}</span>
+                        {% endif %}
+                        
                         <div class="quick-view">Explore Details</div>
                     </div>
                     <div class="product-info">
-                        <h3 class="product-title">{{ product.name }}</h3>
+                        <h3 class="product-title">{{ product.name|truncatewords:4 }}</h3>
                         
                         <div class="product-rating">
                             {% if product.get_review_count > 0 %}
                                 <i class="fas fa-star star-icon"></i>
-                                <span class="rating-number">{{ product.get_avg_rating }}</span>
+                                <span class="rating-number">{{ product.get_avg_rating|floatformat:1 }}</span>
                                 <span class="review-count">({{ product.get_review_count }})</span>
                             {% else %}
                                 <span class="review-count" style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px;">New Arrival</span>

@@ -10,8 +10,16 @@ from .models import Color, Product, Cart, CartItem, Order, OrderItem, ReviewRati
 
 # 1. Home Page
 def home(request):
-    trending_products = Product.objects.filter(is_active=True).order_by('-created_at')[:8]
-    context = {'products': trending_products}
+    # പുരുഷന്മാർക്കുള്ള (Men) പുതിയ 4 പ്രൊഡക്റ്റുകൾ എടുക്കുന്നു
+    men_products = Product.objects.filter(is_active=True, gender='Men').order_by('-created_at')[:4]
+    
+    # സ്ത്രീകൾക്കുള്ള (Women) പുതിയ 4 പ്രൊഡക്റ്റുകൾ എടുക്കുന്നു
+    women_products = Product.objects.filter(is_active=True, gender='Women').order_by('-created_at')[:4]
+    
+    context = {
+        'men_products': men_products,
+        'women_products': women_products,
+    }
     return render(request, 'home.html', context)
 
 def product_detail(request, slug):
@@ -286,27 +294,36 @@ def my_orders(request):
     return render(request, 'my_order.html', context)
 
 # 12. Store Page & Search Function
+# 12. Store Page & Search Function
 def store(request, gender=None, category_slug=None):
     products = Product.objects.filter(is_active=True)
     
-    # 1. Gender / Category ഫിൽറ്ററുകൾ (നിങ്ങളുടെ പഴയ കോഡ്)
+    # 1. Gender ഫിൽറ്റർ
     if gender:
-        products = products.filter(gender=gender.capitalize())
+        products = products.filter(gender__iexact=gender)
+        # 🌟 ആ ജെൻഡറിലുള്ള (Men/Women) പ്രൊഡക്റ്റുകൾക്ക് മാത്രമുള്ള കാറ്റഗറികൾ എടുക്കുന്നു 🌟
+        categories = Category.objects.filter(product__gender__iexact=gender, product__is_active=True).distinct()
+    else:
+        # 🌟 ALL സെലക്ട് ചെയ്യുമ്പോൾ ആക്ടീവ് ആയ എല്ലാ കാറ്റഗറികളും കാണിക്കുന്നു 🌟
+        categories = Category.objects.filter(product__is_active=True).distinct()
+
+    # 2. Category ഫിൽറ്റർ
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = products.filter(category=category)
 
-    # 2. 🌟 പുതിയ Search ലോജിക് 🌟
+    # 3. Search ലോജിക്
     keyword = request.GET.get('keyword')
     if keyword:
-        # പ്രൊഡക്റ്റിന്റെ പേരിലോ ഡിസ്ക്രിപ്ഷനിലോ ആ വാക്കുണ്ടോ എന്ന് നോക്കുന്നു
         products = products.filter(Q(description__icontains=keyword) | Q(name__icontains=keyword))
 
     context = {
-        'products': products,
+        'products': products.distinct(), # ഡ്യൂപ്ലിക്കേറ്റ് വരാതിരിക്കാൻ distinct() ചേർത്തു
+        'categories': categories, 
         'product_count': products.count(),
         'current_gender': gender,
-        'keyword': keyword, # ഈ വേരിയബിൾ HTML-ലേക്ക് അയക്കുന്നു
+        'current_category': category_slug, 
+        'keyword': keyword, 
     }
     return render(request, 'store.html', context)
 
