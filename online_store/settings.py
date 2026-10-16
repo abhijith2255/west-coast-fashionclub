@@ -131,3 +131,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Razorpay Settings
 RAZORPAY_KEY_ID = 'rzp_live_SP8AhpYHRBju0D'
 RAZORPAY_KEY_SECRET = 'ze7Ev5jrSYKiIBlk4l3tgnTM'
+
+CSRF_TRUSTED_ORIGINS = ['https://west-coast-fashionclub-cuzw.vercel.app', 'https://*.vercel.app']
