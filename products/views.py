@@ -22,16 +22,18 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
+# 2. Product Detail Page
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, is_active=True)
     
-    # പ്രൊഡക്റ്റിന്റെ എല്ലാ വേരിയന്റുകളും എടുക്കുന്നു
-    variants = ProductVariant.objects.filter(product=product, is_active=True)
+    # 🌟 NEW: You Might Also Like (ഒരേ കാറ്റഗറിയിലുള്ള മറ്റ് 4 പ്രൊഡക്റ്റുകൾ എടുക്കുന്നു) 🌟
+    # .exclude(id=product.id) കൊടുക്കുന്നത് കസ്റ്റമർ ഇപ്പോൾ നോക്കിക്കൊണ്ടിരിക്കുന്ന പ്രൊഡക്റ്റ് വീണ്ടും വരാതിരിക്കാനാണ്
+    related_products = Product.objects.filter(category=product.category, is_active=True).exclude(id=product.id).order_by('?')[:4]
     
-    # 1. സൈസുകൾ മാത്രം എടുക്കാൻ
+    # (നിങ്ങളുടെ പഴയ കോഡുകൾ - sizes, color_data ഒക്കെ അതുപോലെ തന്നെ നിലനിർത്തുക)
+    variants = ProductVariant.objects.filter(product=product, is_active=True)
     sizes = variants.values_list('size__name', flat=True).distinct()
     
-    # 2. കളറുകളും ഫോട്ടോകളും സ്റ്റോക്കും ജാവാസ്ക്രിപ്റ്റിന് (JS) മനസ്സിലാകുന്ന രീതിയിൽ മാറ്റുന്നു
     color_data = []
     color_images = {}
     color_gallery = {}
@@ -40,30 +42,25 @@ def product_detail(request, slug):
     
     for v in variants:
         c_name = v.color.name
-        
-        # JS-നുള്ള സ്റ്റോക്ക് ഡാറ്റ (ഉദാഹരണത്തിന്: "Black_XL": 15)
         stock_key = f"{c_name}_{v.size.name}"
         variant_data[stock_key] = v.stock
         
         if c_name not in added_colors:
             img_url = v.image.url if v.image else product.main_image.url
-            
             color_data.append({'name': c_name, 'url': img_url})
             color_images[c_name] = img_url
-            
-            # ആ കളറിനുള്ള ഗാലറി ഫോട്ടോകൾ എടുക്കുന്നു
             gallery_objs = ProductGallery.objects.filter(product=product, color=v.color)
             color_gallery[c_name] = [g.image.url for g in gallery_objs]
-            
             added_colors.add(c_name)
 
     context = {
         'product': product,
+        'related_products': related_products, # 🌟 ഇത് HTML-ലേക്ക് പാസ് ചെയ്യുന്നു 🌟
         'sizes': sizes,
         'color_data': color_data,
-        'variant_data': json.dumps(variant_data),   # JS-ലേക്ക് പാസ് ചെയ്യുന്നു
-        'color_images': json.dumps(color_images),   # JS-ലേക്ക് പാസ് ചെയ്യുന്നു
-        'color_gallery': json.dumps(color_gallery), # JS-ലേക്ക് പാസ് ചെയ്യുന്നു
+        'variant_data': json.dumps(variant_data),  
+        'color_images': json.dumps(color_images),  
+        'color_gallery': json.dumps(color_gallery), 
         'review_count': product.get_review_count(),
         'average_rating': product.get_avg_rating(),
     }
